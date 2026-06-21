@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aashka Thakkar, UX Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500&family=Space+Mono:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #0f0e0c;
+      --paper: #f4f0e8;
+      --paper-warm: #ede8dc;
+      --paper-deep: #e4ddd0;
+      --accent: #8E85CB;
+      --accent-light: #b8b4e0;
+      --accent-dim: rgba(142,133,203,0.12);
+      --muted: #8a8070;
+      --rule: #d4cdc0;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --sans: 'Inter', system-ui, sans-serif;
+      --mono: 'Space Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 17px;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    /* ─── CURSOR ─── */
+    .cursor { position: fixed; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; pointer-events: none; z-index: 9999; mix-blend-mode: multiply; }
+    .cursor-ring { position: fixed; width: 32px; height: 32px; border: 1px solid var(--accent); border-radius: 50%; pointer-events: none; z-index: 9998; transition: all 0.3s cubic-bezier(0.23,1,0.32,1); mix-blend-mode: multiply; opacity: 0.5; }
+
+    /* ─── HEADER ─── */
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 48px;
+      background: rgba(244,240,232,0.9);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s ease;
+    }
+    header.scrolled { border-bottom-color: var(--rule); }
+    .header-name {
+      font-family: var(--mono); font-size: 16px;
+      letter-spacing: 0.06em; color: var(--ink); text-decoration: none;
+    }
+    nav { display: flex; gap: 32px; align-items: center; }
+    nav a {
+      font-family: var(--mono); font-size: 16px; letter-spacing: 0.06em;
+      text-transform: uppercase; color: var(--muted);
+      text-decoration: none; transition: color 0.2s ease; position: relative;
+    }
+    nav a::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 1px; background: var(--accent); transition: width 0.3s ease; }
+    nav a:hover { color: var(--ink); }
+    nav a:hover::after { width: 100%; }
+
+    /* ─── HERO ─── */
+    .opening {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 52fr 48fr;
+      gap: 48px;
+      align-items: center;
+      padding: 120px 48px 80px;
+    }
+
+    .opening-text { display: flex; flex-direction: column; }
+
+    .opening-greeting {
+      font-family: var(--mono); font-size: 16px;
+      letter-spacing: 0.08em; color: var(--muted);
+      margin-bottom: 8px;
+      opacity: 0; animation: fadeUp 0.6s ease 0.1s forwards;
+    }
+
+    .opening-name {
+      font-family: var(--serif);
+      font-size: clamp(48px, 6.5vw, 96px);
+      font-weight: 300; line-height: 0.95; letter-spacing: -0.03em;
+      color: var(--ink); margin-bottom: 32px;
+      opacity: 0; animation: fadeUp 0.9s ease 0.22s forwards;
+    }
+
+    .opening-headline {
+      font-family: var(--serif);
+      font-size: clamp(20px, 2.5vw, 36px);
+      font-weight: 300; line-height: 1.3; letter-spacing: -0.01em;
+      color: var(--muted); margin-bottom: 16px;
+      max-width: 560px;
+      opacity: 0; animation: fadeUp 0.9s ease 0.38s forwards;
+    }
+    .opening-headline em { font-style: italic; color: var(--accent); }
+
+    .opening-sub {
+      font-size: 17px; line-height: 1.7;
+      color: var(--muted); max-width: 480px;
+      margin-bottom: 40px;
+      opacity: 0; animation: fadeUp 0.9s ease 0.52s forwards;
+    }
+
+    .opening-actions {
+      display: flex; gap: 16px; flex-wrap: wrap;
+      opacity: 0; animation: fadeUp 0.9s ease 0.64s forwards;
+    }
+    .btn {
+      font-family: var(--mono); font-size: 16px; letter-spacing: 0.06em;
+      text-transform: uppercase; text-decoration: none; display: inline-block;
+      padding: 14px 28px; border: 1px solid var(--ink);
+      color: var(--ink); background: transparent;
+      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+      cursor: pointer;
+    }
+    .btn-primary { background: var(--ink); color: var(--paper); }
+    .btn-primary:hover { background: var(--accent); border-color: var(--accent); color: var(--paper); }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+    .btn-download { padding: 14px 18px; flex-shrink: 0; }
+    .btn-download:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ─── HERO DIAGRAM ─── */
+    .opening-visual {
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; animation: fadeIn 1.2s ease 0.5s forwards;
+    }
+    .hero-diagram {
+      width: 100%; max-width: 480px; height: auto;
+      overflow: visible;
+    }
+    .d-conn {
+      stroke: var(--rule); stroke-width: 1; fill: none;
+      transition: stroke 0.3s ease, stroke-width 0.3s ease, stroke-opacity 0.3s;
+      stroke-opacity: 0.6;
+    }
+    .d-conn.lit { stroke: var(--accent); stroke-opacity: 0.5; stroke-width: 1.5; }
+    .d-node circle {
+      fill: none; stroke: var(--rule); stroke-width: 1;
+      transition: stroke 0.3s, fill 0.3s, stroke-width 0.3s;
+    }
+    .d-node.primary circle { stroke-width: 1.5; }
+    .d-node text {
+      fill: var(--muted); font-family: var(--mono); font-size: 16px;
+      text-anchor: middle; dominant-baseline: middle;
+      pointer-events: none; opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .d-node.lit circle { stroke: var(--accent); fill: var(--accent-dim); }
+    .d-node.lit text { opacity: 1; }
+    .d-node.dim circle { stroke: var(--rule); stroke-opacity: 0.35; }
+    .d-node.dim text { opacity: 0; }
+    .d-node { cursor: pointer; }
+
+    /* ─── WORK ─── */
+    .work { padding: 96px 48px 100px; }
+    .work-header {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      border-bottom: 1px solid var(--rule); padding-bottom: 28px; margin-bottom: 0;
+      gap: 40px;
+    }
+    .work-header-left { display: flex; flex-direction: column; gap: 12px; }
+    .work-label { font-family: var(--serif); font-size: 20px; font-style: italic; letter-spacing: 0.02em; color: var(--muted); }
+    .work-intro { font-size: 16px; color: var(--muted); max-width: 520px; line-height: 1.7; }
+    .work-count { font-family: var(--mono); font-size: 16px; color: var(--muted); white-space: nowrap; padding-top: 4px; }
+
+    /* ─── PROJECT ENTRIES ─── */
+    .project-entry {
+  display: grid;
+  grid-template-columns: 1fr 260px 80px;
+  gap: 0 40px;
+  align-items: start;
+  border-bottom: 1px solid var(--rule);
+  padding: 56px 56px 56px 32px;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.3s ease;
+}
+    .project-entry::before { content: ''; position: absolute; left: 0; bottom: 0; width: 0; height: 1px; background: var(--accent); transition: width 0.5s cubic-bezier(0.23,1,0.32,1); }
+    .project-entry:hover::before { width: 100%; }
+    .project-entry:hover { background: rgba(142,133,203,0.06); }
+    .project-domain { font-family: var(--mono); font-size: 16px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+    .project-name { font-family: var(--serif); font-size: clamp(28px, 4vw, 52px); font-weight: 400; line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 16px; transition: color 0.2s ease; }
+    .project-entry:hover .project-name { color: var(--accent); }
+    .project-hook { font-family: var(--serif); font-style: italic; font-size: clamp(17px, 2vw, 20px); color: var(--accent); line-height: 1.35; margin-bottom: 12px; font-weight: 300; }
+    .project-premise { font-size: 16px; color: var(--muted); max-width: 460px; line-height: 1.7; }
+    .project-arrow { font-size: 22px; color: var(--rule); padding-top: 4px; transition: color 0.2s ease, transform 0.2s ease; align-self: center; }
+    .project-entry:hover .project-arrow { color: var(--accent); transform: translate(4px,-4px); }
+
+    /* ─── PROJECT ARTIFACTS ─── */
+    .project-artifact {
+      border: 1px solid var(--rule); padding: 24px 24px 20px;
+      font-family: var(--mono); font-size: 16px; color: var(--muted);
+      line-height: 1.6; opacity: 0.4; transition: opacity 0.3s ease;
+      align-self: center;
+    }
+    .project-entry:hover .project-artifact { opacity: 1; }
+    .artifact-label { font-size: 16px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; opacity: 0.85; display: block; }
+    .artifact-note { font-family: var(--serif); font-style: italic; font-size: 17px; color: var(--muted); margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--rule); line-height: 1.45; }
+
+    /* Funnel bars */
+    .artifact-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .artifact-bar-fill { height: 2px; background: var(--accent); opacity: 0.4; flex-shrink: 0; }
+    .artifact-bar-label { font-size: 16px; color: var(--muted); white-space: nowrap; flex: 1; }
+    .artifact-bar-n { font-size: 16px; color: var(--ink); }
+
+    /* Workflow */
+    .artifact-workflow { display: flex; flex-direction: column; gap: 8px; }
+    .aw-row { display: flex; align-items: center; gap: 8px; font-size: 16px; }
+    .aw-node { border: 1px solid var(--rule); padding: 4px 12px; white-space: nowrap; font-size: 16px; }
+    .aw-node.highlight { border-color: var(--accent); color: var(--accent); }
+    .aw-arrow { color: var(--rule); font-size: 16px; }
+    .aw-gap { font-size: 16px; color: var(--rule); font-style: italic; padding-left: 4px; }
+
+    /* Role mapping */
+    .artifact-row { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; font-size: 16px; }
+    .artifact-role { border: 1px solid var(--rule); padding: 4px 10px; font-size: 16px; white-space: nowrap; }
+    .artifact-arrow { color: var(--rule); }
+    .artifact-conflict { color: var(--accent); }
+
+    /* IA tree */
+
+    /* Decision map */
+    .artifact-decision { display: grid; grid-template-columns: 1fr 1px 1fr; gap: 0; }
+    .ad-col { padding: 0 12px; }
+    .ad-col:first-child { padding-left: 0; }
+    .ad-divider { background: var(--rule); }
+    .ad-head { font-size: 16px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+    .ad-step { font-size: 16px; color: var(--muted); margin-bottom: 6px; }
+    .ad-step.gap { color: var(--accent); }
+
+    /* ─── ABOUT ─── */
+    .about {
+      padding: 100px 48px;
+      background: var(--paper-warm);
+      display: grid;
+      grid-template-columns: 5fr 7fr;
+      gap: 72px;
+      align-items: start;
+    }
+    .about-heading {
+      font-family: var(--serif);
+      font-size: clamp(36px, 5vw, 64px);
+      font-weight: 300; line-height: 1.1; letter-spacing: -0.02em;
+      margin-bottom: 36px;
+    }
+    .about-heading em { font-style: italic; color: var(--accent); }
+
+    /* Photo placeholder */
+    .about-artifact {
+      border: 1px solid var(--rule); background: var(--paper-deep);
+      min-height: 280px; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 32px; position: relative;
+      overflow: hidden;
+      padding: 0;
+    }
+
+    .about-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: 0;
+    }
+    .aa-corner { position: absolute; width: 14px; height: 14px; border-color: var(--rule); border-style: solid; }
+    .aa-corner.tl { top: 8px; left: 8px; border-width: 1px 0 0 1px; }
+    .aa-corner.tr { top: 8px; right: 8px; border-width: 1px 1px 0 0; }
+    .aa-corner.bl { bottom: 8px; left: 8px; border-width: 0 0 1px 1px; }
+    .aa-corner.br { bottom: 8px; right: 8px; border-width: 0 1px 1px 0; }
+    .aa-label { font-family: var(--mono); font-size: 16px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--rule); margin-bottom: 10px; }
+    .aa-desc { font-family: var(--serif); font-style: italic; font-size: 18px; color: var(--rule); line-height: 1.5; max-width: 240px; }
+
+    /* Domains panel */
+    .about-domains {
+      margin-top: 24px;
+      border: 1px solid var(--rule);
+      padding: 24px;
+    }
+    .about-domains-label {
+      font-family: var(--mono); font-size: 16px; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 16px;
+    }
+    .domain-list { display: flex; flex-direction: column; gap: 0; }
+    .domain-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 0; border-bottom: 1px solid var(--rule);
+      font-size: 17px; color: var(--ink);
+    }
+    .domain-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .domain-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+
+    /* Methods panel */
+    .about-methods {
+      margin-top: 24px;
+      padding: 24px;
+      background: var(--paper-deep);
+    }
+    .about-methods-label {
+      font-family: var(--mono); font-size: 16px; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 16px;
+    }
+    .method-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .method-tag {
+      font-family: var(--mono); font-size: 16px;
+      border: 1px solid var(--rule); padding: 5px 12px;
+      color: var(--muted); white-space: nowrap;
+    }
+
+    .notebook-fragment {
+      margin-top: 24px; padding: 22px;
+      border: 1px solid var(--rule);
+    }
+    .nb-label { font-family: var(--mono); font-size: 16px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--rule); margin-bottom: 14px; }
+    .nb-text { font-family: var(--serif); font-style: italic; font-size: clamp(17px, 1.8vw, 20px); font-weight: 300; line-height: 1.6; color: var(--muted); }
+
+    .about-story p { font-size: 17px; line-height: 1.8; color: var(--ink); margin-bottom: 22px; }
+    .about-story p:last-child { margin-bottom: 0; }
+    .about-story p em { font-style: italic; }
+
+    .timeline-section { margin-top: 56px; }
+    .timeline-heading { font-family: var(--mono); font-size: 16px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 36px; }
+    .timeline { position: relative; }
+    .timeline::before { content: ''; position: absolute; left: 0; top: 8px; bottom: 8px; width: 1px; background: var(--rule); }
+    .timeline-item { padding-left: 28px; margin-bottom: 36px; position: relative; opacity: 0; transform: translateX(16px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .timeline-item.visible { opacity: 1; transform: translateX(0); }
+    .timeline-item::before { content: ''; position: absolute; left: -4px; top: 8px; width: 9px; height: 9px; border-radius: 50%; border: 1px solid var(--accent); background: var(--paper-warm); }
+    .timeline-item.edu::before { border-color: var(--muted); }
+    .timeline-period { font-family: var(--mono); font-size: 16px; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 5px; }
+    .timeline-role { font-size: 17px; font-weight: 500; color: var(--ink); margin-bottom: 3px; }
+    .timeline-org { font-family: var(--serif); font-style: italic; font-size: 19px; color: var(--accent); margin-bottom: 8px; }
+    .timeline-org.edu-org { color: var(--muted); }
+    .timeline-desc { font-size: 16px; color: var(--muted); line-height: 1.65; }
+
+    /* ─── CONTACT ─── */
+    .contact {
+      padding: 120px 48px;
+      border-top: 1px solid var(--rule);
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: end;
+    }
+    .contact-heading { font-family: var(--serif); font-size: clamp(30px, 4.5vw, 56px); font-weight: 300; line-height: 1.12; letter-spacing: -0.02em; margin-bottom: 28px; }
+    .contact-heading em { font-style: italic; color: var(--accent); }
+    .contact-sub { font-size: 17px; color: var(--muted); line-height: 1.75; max-width: 400px; }
+    .contact-right { display: flex; flex-direction: column; gap: 24px; }
+    .contact-link { display: flex; align-items: center; justify-content: space-between; text-decoration: none; color: var(--ink); border-bottom: 1px solid var(--rule); padding-bottom: 20px; transition: border-color 0.2s ease; }
+    .contact-link:hover { border-color: var(--accent); }
+    .contact-link:hover .cl-label { color: var(--accent); }
+    .contact-link:hover .cl-arrow { transform: translate(4px,-4px); }
+    .cl-meta { display: flex; flex-direction: column; gap: 5px; }
+    .cl-type { font-family: var(--mono); font-size: 16px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+    .cl-label { font-size: 18px; transition: color 0.2s ease; }
+    .cl-arrow { font-size: 18px; color: var(--muted); transition: color 0.2s ease, transform 0.2s ease; }
+
+    /* ─── FOOTER ─── */
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+    .reveal { opacity:0; transform:translateY(20px); transition:opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+
+    /* ─── RESPONSIVE ─── */
+
+    /* Large desktop — artifact visible */
+    @media (max-width: 1280px) {
+      .project-entry { grid-template-columns: 1fr 240px 64px; gap: 0 32px; padding: 48px 40px 48px 24px; }
+    }
+    @media (max-width: 1100px) {
+      .project-entry { grid-template-columns: 1fr 44px; gap: 0 24px; padding-right: 0; }
+      .project-artifact { display: none; }
+    }
+
+    /* Tablet landscape */
+    @media (max-width: 900px) {
+      .opening {
+        grid-template-columns: 1fr;
+        min-height: auto;
+        padding: 120px 48px 72px;
+        gap: 48px;
+      }
+      .opening-visual { justify-content: flex-start; }
+      .hero-diagram { max-width: 380px; }
+      .about { grid-template-columns: 1fr; gap: 56px; }
+      .about-left { max-width: 520px; }
+      .contact { grid-template-columns: 1fr; gap: 48px; }
+      .contact-sub { max-width: 560px; }
+    }
+
+    /* Tablet portrait */
+    @media (max-width: 768px) {
+      header { padding: 16px 24px; }
+      nav { gap: 20px; }
+      .opening { padding: 96px 24px 60px; gap: 40px; }
+      .opening-actions { gap: 12px; }
+      .work { padding: 64px 24px 80px; }
+      .work-header { flex-direction: column; gap: 12px; }
+      .about { padding: 60px 24px; }
+      .contact { padding: 72px 24px; }
+      footer { padding: 24px; }
+      .project-entry { grid-template-columns: 1fr 36px; gap: 0 16px; padding: 36px 0 36px 0; }
+      .project-premise { max-width: 100%; }
+      .cursor, .cursor-ring { display: none; }
+      .timeline-section { margin-top: 40px; }
+    }
+
+    /* Mobile */
+    @media (max-width: 480px) {
+      header { padding: 14px 20px; }
+      nav { gap: 16px; }
+      .opening { padding: 84px 20px 52px; gap: 36px; }
+      .opening-actions { flex-direction: column; align-items: flex-start; gap: 10px; }
+      .btn { display: block; text-align: center; }
+      .btn-download { display: inline-block; width: auto; align-self: flex-start; }
+      .work { padding: 48px 20px 60px; }
+      .about { padding: 48px 20px; }
+      .contact { padding: 56px 20px; }
+      footer { padding: 20px; }
+      .hero-diagram { max-width: 300px; }
+      .opening-visual { display: none; }
+      .project-entry { grid-template-columns: 1fr 32px; gap: 0 12px; padding: 28px 0; }
+      .method-tags { gap: 6px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <header id="header">
+    <a href="index.html" class="header-name">AT</a>
+    <nav>
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <!-- ── HERO ── -->
+  <section class="opening">
+    <div class="opening-text">
+      <p class="opening-greeting">Hi, I'm</p>
+      <h1 class="opening-name">Aashka Thakkar</h1>
+      <p class="opening-headline">
+        Making complex systems <em>easier</em> for people to understand and use.
+      </p>
+      <p class="opening-sub">I focus on the gap between how systems are built and how people actually work within them.</p>
+      <div class="opening-actions">
+        <a href="#work" class="btn btn-primary">View Work</a>
+        <a href="resume.pdf" download="Aashka_Thakkar_Resume.pdf" class="btn btn-secondary">View Resume</a>
+      </div>
+    </div>
+
+    <div class="opening-visual">
+      <svg id="heroDiagram" class="hero-diagram" viewBox="0 0 480 330" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <!-- Connections rendered by JS -->
+        <g id="connLayer"></g>
+        <!-- Nodes rendered by JS -->
+        <g id="nodeLayer"></g>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ── SELECTED WORK ── -->
+  <section class="work" id="work">
+    <div class="work-header reveal">
+      <div class="work-header-left">
+        <span class="work-label">Selected Case Studies</span>
+        <p class="work-intro">Work on systems, workflows, and the decisions people make when complexity gets in the way.</p>
+      </div>
+    </div>
+
+    <!-- Asuretify -->
+    <a class="project-entry reveal" href="asuretify.html">
+      <div class="project-body">
+        <div class="project-domain">Website Redesign</div>
+        <h2 class="project-name">Asuretify</h2>
+        <p class="project-hook">The traffic was fine. The clarity wasn't.</p>
+        <p class="project-premise">100+ Hotjar session recordings revealed a pattern no analytics dashboard could show: users spent time exploring, comparing, and reading before taking action. The redesign focused on reducing decision-making friction and surfacing the right information earlier.</p>
+      </div>
+      <div class="project-artifact">
+        <span class="artifact-label">Drop-off evidence</span>
+        <div class="artifact-bar">
+          <div class="artifact-bar-fill" style="width:84px;"></div>
+          <span class="artifact-bar-label">Landed</span>
+          <span class="artifact-bar-n">4,230</span>
+        </div>
+        <div class="artifact-bar">
+          <div class="artifact-bar-fill" style="width:48px;"></div>
+          <span class="artifact-bar-label">Reached form</span>
+          <span class="artifact-bar-n">847</span>
+        </div>
+        <div class="artifact-bar">
+          <div class="artifact-bar-fill" style="width:20px;"></div>
+          <span class="artifact-bar-label">Submitted</span>
+          <span class="artifact-bar-n">203</span>
+        </div>
+        <div class="artifact-bar">
+          <div class="artifact-bar-fill" style="width:8px;"></div>
+          <span class="artifact-bar-label">Completed</span>
+          <span class="artifact-bar-n">89</span>
+        </div>
+        <div class="artifact-note">"Traffic isn't the problem."</div>
+      </div>
+      <div class="project-arrow">↗</div>
+    </a>
+
+    <!-- Anzenn -->
+    <a class="project-entry reveal" href="anzenn.html">
+      <div class="project-body">
+        <div class="project-domain">AI-Powered Mobile Inspection App</div>
+        <h2 class="project-name">Anzenn</h2>
+        <p class="project-hook">Not another camera app.</p>
+        <p class="project-premise">The goal was never to build a better photo tool. It was to reduce the documentation work that follows every inspection so inspectors could focus on the inspection itself. Seven research findings became seven design decisions.</p>
+      </div>
+      <div class="project-artifact" style="background:var(--paper-deep);">
+        <span class="artifact-label">Workflow gap</span>
+        <div class="artifact-workflow">
+          <div class="aw-row"><span class="aw-node highlight">Capture</span><span class="aw-arrow">→</span><span class="aw-gap">3 to 4 days</span></div>
+          <div class="aw-row" style="padding-left:4px;"><span class="aw-node">Draft report</span></div>
+        </div>
+        <div class="artifact-note">"The gap between capture and context is where accuracy dies."</div>
+      </div>
+      <div class="project-arrow">↗</div>
+    </a>
+
+    <!-- Prequaligy -->
+    <a class="project-entry reveal" href="prequaligy.html">
+      <div class="project-body">
+        <div class="project-domain">Contractor Qualification Platform</div>
+        <h2 class="project-name">Prequaligy</h2>
+        <p class="project-hook">Three groups. One broken system. The issue wasn't missing functionality.</p>
+        <p class="project-premise">Requestors, contractors, and administrators each struggled with the same platform for different reasons. The problem was exposed complexity, and the solution was a new navigational logic called ShortFlow.</p>
+      </div>
+      <div class="project-artifact">
+        <span class="artifact-label">Stakeholder map</span>
+        <div class="artifact-row"><span class="artifact-role">Requestor</span><span class="artifact-arrow">→</span><span class="artifact-conflict">overloaded</span></div>
+        <div class="artifact-row"><span class="artifact-role">Contractor</span><span class="artifact-arrow">→</span><span class="artifact-conflict">lost</span></div>
+        <div class="artifact-row"><span class="artifact-role">Admin</span><span class="artifact-arrow">→</span><span class="artifact-conflict">blocked</span></div>
+        <div class="artifact-note">"Same portal. Three different breakdowns."</div>
+      </div>
+      <div class="project-arrow">↗</div>
+    </a>
+
+    <!-- FlowDesk -->
+    <a class="project-entry reveal" href="flowdesk.html">
+      <div class="project-body">
+        <div class="project-domain">Freelancer Operating System Concept</div>
+        <h2 class="project-name">FlowDesk</h2>
+        <p class="project-hook">The problem wasn't productivity. It was fragmentation.</p>
+        <p class="project-premise">A concept product that starts by questioning the premise of the productivity market. Freelancers don't need better tools. They need fewer places where their work lives.</p>
+      </div>
+      <div class="project-artifact" style="background:var(--paper-deep);">
+        <span class="artifact-label">Design Principle</span>
+        <div class="artifact-note" style="margin-top:0;padding-top:0;border-top:none;">
+          Reduce decision-making friction by bringing projects, clients, finances, and scheduling into a single workflow.
+        </div>
+      </div>
+      <div class="project-arrow">↗</div>
+    </a>
+
+    <!-- BookMyShow -->
+    <a class="project-entry reveal" href="bookmyshow.html">
+      <div class="project-body">
+        <div class="project-domain">Consumer Experience Redesign</div>
+        <h2 class="project-name">BookMyShow</h2>
+        <p class="project-hook">The platform assumes users begin with a movie. Many begin with a free Saturday.</p>
+        <p class="project-premise">An information architecture mismatch masquerading as a UX problem. The fix wasn't better filters or bigger posters. It was a parallel entry point built around how people actually think.</p>
+      </div>
+      <div class="project-artifact">
+        <span class="artifact-label">Mental model gap</span>
+        <div class="artifact-decision">
+          <div class="ad-col">
+            <div class="ad-head">Platform</div>
+            <div class="ad-step">Movie</div>
+            <div class="ad-step">→ Date</div>
+            <div class="ad-step">→ Seat</div>
+          </div>
+          <div class="ad-divider"></div>
+          <div class="ad-col">
+            <div class="ad-head">User</div>
+            <div class="ad-step">Date</div>
+            <div class="ad-step gap">→ ???</div>
+            <div class="ad-step">→ Movie</div>
+          </div>
+        </div>
+        <div class="artifact-note">"The gap is the entire problem."</div>
+      </div>
+      <div class="project-arrow">↗</div>
+    </a>
+  </section>
+
+  <!-- ── ABOUT ── -->
+  <section class="about" id="about">
+    <div class="about-left">
+      <h2 class="about-heading reveal">The long<br><em>way</em><br>around.</h2>
+
+   <div class="about-artifact reveal">
+  <img src="images/aashka1.png" alt="Aashka Thakkar" class="about-photo">
+</div>
+
+
+      <div class="about-methods reveal">
+        <div class="about-methods-label">How I Work</div>
+        <div class="method-tags">
+          <span class="method-tag">Field Research</span>
+          <span class="method-tag">Behavior Analysis</span>
+          <span class="method-tag">Journey Mapping</span>
+          <span class="method-tag">Workflow Design</span>
+          <span class="method-tag">Decision Mapping</span>
+          <span class="method-tag">Information Structure</span>
+          <span class="method-tag">Prototyping</span>
+          <span class="method-tag">Design Systems</span>
+          <span class="method-tag">Cross-Functional Collaboration</span>
+        </div>
+      </div>
+
+      <div class="notebook-fragment reveal">
+        <div class="nb-label">A belief that guides my work</div>
+        <div class="nb-text">"Most users are not struggling because they lack ability. They are struggling because the product expects them to think like the system instead of the other way around."</div>
+      </div>
+    </div>
+
+    <div class="about-right">
+      <div class="about-story">
+        <p class="reveal">My work started in graphic design: event posters, brochures, promotional materials for university organizations and local businesses. That work taught me to communicate clearly with limited space and attention.</p>
+        <p class="reveal">Over time, I became more interested in the systems people work within than in the artifacts I was producing for them. How people navigate complexity. How decisions get made under pressure. How workflows break in ways that no one officially acknowledges.</p>
+        <p class="reveal">That curiosity became UX. Today I focus on user research, information architecture, workflow design, and the specific problem of making complex systems understandable for the people who must use them.</p>
+        <p class="reveal"><em>The domain I care about most is the one where getting it wrong has real consequences.</em></p>
+      </div>
+
+      <div class="timeline-section">
+        <div class="timeline-heading">Background and Trajectory</div>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-period">Dec 2024 to Present</div>
+            <div class="timeline-role">UI/UX Designer</div>
+            <div class="timeline-org">Injala</div>
+            <div class="timeline-desc">Working across four products: Asuretify, Anzenn, Prequaligy, and Riskguru. User research, Hotjar analysis, session recordings, personas, empathy mapping, IA, wireframing, prototyping, cross-functional collaboration.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-period">2023 to Present</div>
+            <div class="timeline-role">Graphic and UI Designer</div>
+            <div class="timeline-org">Independent Freelance</div>
+            <div class="timeline-desc">Official graphic designer for university events and student organizations: event branding, posters, brochures, marketing materials.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-period">Earlier</div>
+            <div class="timeline-role">Systems and QA Intern</div>
+            <div class="timeline-org">LJ University</div>
+            <div class="timeline-desc">Evaluated workflows, tested systems, validated data, identified usability issues, suggested improvements.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-period">Earlier</div>
+            <div class="timeline-role">IIPC Coordinator / Asst. TPO</div>
+            <div class="timeline-org">LJ University</div>
+            <div class="timeline-desc">Managed placement activities and coordinated communication between students and company representatives.</div>
+          </div>
+          <div class="timeline-item edu">
+            <div class="timeline-period">2023 to 2025</div>
+            <div class="timeline-role">Master of Computer Applications</div>
+            <div class="timeline-org edu-org">LJ University</div>
+          </div>
+          <div class="timeline-item edu">
+            <div class="timeline-period">2020 to 2023</div>
+            <div class="timeline-role">Bachelor of Computer Applications</div>
+            <div class="timeline-org edu-org">LJ University</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CONTACT ── -->
+  <section class="contact" id="contact">
+    <div class="contact-left">
+      <h2 class="contact-heading reveal">
+        If something should be<br>
+        simpler, let's find out<br>
+        <em>why it isn't.</em>
+      </h2>
+      <p class="contact-sub reveal">I work best when the problem is unclear, the system is complex, and the stakes are real. If your users are adapting to friction instead of being helped through it, that's where I want to start.</p>
+    </div>
+    <div class="contact-right reveal">
+      <a href="mailto:aashka.s.thakkar@gmail.com" class="contact-link">
+        <div class="cl-meta">
+          <span class="cl-type">Email</span>
+          <span class="cl-label">aashka.s.thakkar@gmail.com</span>
+        </div>
+        <span class="cl-arrow">↗</span>
+      </a>
+      <a href="https://www.linkedin.com/in/aashka-thakkar" target="_blank" class="contact-link">
+        <div class="cl-meta">
+          <span class="cl-type">LinkedIn</span>
+          <span class="cl-label">linkedin.com/in/aashka-thakkar</span>
+        </div>
+        <span class="cl-arrow">↗</span>
+      </a>
+      <div class="contact-link" style="cursor:default;">
+        <div class="cl-meta">
+          <span class="cl-type">Location</span>
+          <span class="cl-label">Ahmedabad, India</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+  <script>
+    // ── CURSOR ──
+    const cursor = document.getElementById('cursor');
+    const ring   = document.getElementById('cursorRing');
+    let mx=0,my=0,rx=0,ry=0;
+    document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+    (function animateCursor(){
+      cursor.style.left=mx-4+'px'; cursor.style.top=my-4+'px';
+      rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
+      ring.style.left=rx-16+'px'; ring.style.top=ry-16+'px';
+      requestAnimationFrame(animateCursor);
+    })();
+    document.querySelectorAll('a,button,.d-node').forEach(el=>{
+      el.addEventListener('mouseenter',()=>{cursor.style.transform='scale(2)';ring.style.transform='scale(1.4)';});
+      el.addEventListener('mouseleave',()=>{cursor.style.transform='scale(1)';ring.style.transform='scale(1)';});
+    });
+
+    // ── HEADER SCROLL ──
+    const header = document.getElementById('header');
+    window.addEventListener('scroll',()=>header.classList.toggle('scrolled',scrollY>40));
+
+    // ── REVEAL ──
+    const obs = new IntersectionObserver(entries=>{
+      entries.forEach(e=>{ if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);} });
+    },{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
+    document.querySelectorAll('.reveal,.timeline-item').forEach(el=>obs.observe(el));
+
+    // ── HERO DIAGRAM ──
+    (function buildDiagram(){
+      const NODES = [
+        { id:'systems',       label:'Systems',       cx:240, cy:165, r:24, primary:true },
+        { id:'people',        label:'People',        cx:90,  cy:82,  r:18 },
+        { id:'complexity',    label:'Complexity',    cx:392, cy:72,  r:18 },
+        { id:'behavior',      label:'Behavior',      cx:56,  cy:192, r:16 },
+        { id:'mental-models', label:'Mental Models', cx:394, cy:178, r:16 },
+        { id:'decisions',     label:'Decisions',     cx:375, cy:268, r:18 },
+        { id:'clarity',       label:'Clarity',       cx:236, cy:296, r:18 },
+        { id:'trust',         label:'Trust',         cx:88,  cy:272, r:16 },
+      ];
+      const EDGES = [
+        ['systems','people'],['systems','complexity'],['systems','behavior'],
+        ['systems','mental-models'],['systems','decisions'],['systems','clarity'],
+        ['people','behavior'],['people','trust'],
+        ['complexity','mental-models'],['mental-models','decisions'],
+        ['decisions','clarity'],['trust','clarity'],
+      ];
+
+      const ns = 'http://www.w3.org/2000/svg';
+      const connL = document.getElementById('connLayer');
+      const nodeL = document.getElementById('nodeLayer');
+
+      // Map for lookups
+      const nodeMap = {};
+      NODES.forEach(n=>nodeMap[n.id]=n);
+
+      // Build connection elements
+      const edgeEls = {};
+      EDGES.forEach(([a,b])=>{
+        const na=nodeMap[a], nb=nodeMap[b];
+        const line=document.createElementNS(ns,'line');
+        line.setAttribute('x1',na.cx); line.setAttribute('y1',na.cy);
+        line.setAttribute('x2',nb.cx); line.setAttribute('y2',nb.cy);
+        line.classList.add('d-conn');
+        line.dataset.from=a; line.dataset.to=b;
+        connL.appendChild(line);
+        const key=a+'|'+b;
+        edgeEls[key]=line;
+      });
+
+      // Build node elements
+      const nodeEls = {};
+      NODES.forEach(n=>{
+        const g = document.createElementNS(ns,'g');
+        g.classList.add('d-node');
+        if(n.primary) g.classList.add('primary');
+        g.dataset.id = n.id;
+
+        const c = document.createElementNS(ns,'circle');
+        c.setAttribute('cx',n.cx); c.setAttribute('cy',n.cy); c.setAttribute('r',n.r);
+        g.appendChild(c);
+
+        const t = document.createElementNS(ns,'text');
+        t.setAttribute('x',n.cx);
+        // Place label outside circle: above for top nodes, below for bottom ones
+        const yOff = n.cy > 165 ? n.r+16 : -(n.r+10);
+        t.setAttribute('y', n.cy+yOff);
+        t.textContent = n.label;
+        g.appendChild(t);
+
+        nodeL.appendChild(g);
+        nodeEls[n.id]=g;
+      });
+
+      // Adjacency list
+      const adj = {};
+      NODES.forEach(n=>adj[n.id]=new Set());
+      EDGES.forEach(([a,b])=>{adj[a].add(b); adj[b].add(a);});
+
+      function activate(id){
+        // Reset
+        Object.values(nodeEls).forEach(el=>el.classList.remove('lit','dim'));
+        Object.values(edgeEls).forEach(el=>el.classList.remove('lit'));
+
+        if(!id){ return; }
+
+        // Light active node
+        nodeEls[id].classList.add('lit');
+
+        // Dim others, light adjacent
+        const neighbors = adj[id];
+        NODES.forEach(n=>{
+          if(n.id!==id){ nodeEls[n.id].classList.toggle('dim',!neighbors.has(n.id)); }
+        });
+
+        // Light connected edges
+        EDGES.forEach(([a,b])=>{
+          const key=a+'|'+b;
+          if(a===id||b===id) edgeEls[key].classList.add('lit');
+        });
+      }
+
+      // Hover interactions
+      Object.values(nodeEls).forEach(el=>{
+        el.addEventListener('mouseenter',()=>{ clearInterval(autoTimer); activate(el.dataset.id); });
+        el.addEventListener('mouseleave',()=>{ activate(null); startAuto(); });
+      });
+
+      // Auto-cycle
+      const order = NODES.map(n=>n.id);
+      let autoIdx=0, autoTimer;
+      function startAuto(){
+        autoIdx=0;
+        autoTimer=setInterval(()=>{
+          activate(order[autoIdx % order.length]);
+          autoIdx++;
+        }, 2400);
+      }
+      // Begin after initial animation
+      setTimeout(startAuto, 1200);
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FlowDesk, Aashka Thakkar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500&family=Space+Mono:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --ink:#0f0e0c;--paper:#f4f0e8;--paper-warm:#ede8dc;--paper-deep:#e4ddd0;
+      --accent:#8E85CB;--accent-light:#b8b4e0;--muted:#8a8070;--rule:#d4cdc0;
+      --serif:'Cormorant Garamond',Georgia,serif;--sans:'Inter',system-ui,sans-serif;--mono:'Space Mono',monospace;
+    }
+    html{scroll-behavior:smooth;}
+    body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.65;overflow-x:hidden;}
+
+    .progress-bar{position:fixed;top:0;left:0;height:2px;background:var(--accent);z-index:200;width:0%;transition:width 0.1s linear;}
+    nav.top{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:22px 48px;background:rgba(244,240,232,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--rule);}
+    .nav-back{font-family:var(--mono);font-size:16px;letter-spacing:0.08em;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+    .nav-back:hover{color:var(--ink);}
+    .nav-meta{font-family:var(--mono);font-size:16px;letter-spacing:0.06em;color:var(--muted);}
+    .nav-next{font-family:var(--mono);font-size:16px;letter-spacing:0.08em;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+    .nav-next:hover{color:var(--ink);}
+
+    .cs-hero{min-height:100vh;padding:140px 48px 80px;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden;background:#0f0e14;}
+    .cs-hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 80% 30%,rgba(142,133,203,0.16) 0%,transparent 60%);}
+    .cs-eyebrow{font-family:var(--mono);font-size:16px;letter-spacing:0.14em;color:var(--accent-light);margin-bottom:24px;opacity:0;animation:fadeUp 0.7s ease 0.2s forwards;}
+    .cs-title{font-family:var(--serif);font-size:clamp(60px,9vw,120px);font-weight:300;line-height:0.95;letter-spacing:-0.03em;color:var(--paper);margin-bottom:24px;opacity:0;animation:fadeUp 0.8s ease 0.4s forwards;}
+    .cs-hook{font-family:var(--serif);font-style:italic;font-size:clamp(20px,2.5vw,28px);color:var(--accent-light);font-weight:300;line-height:1.3;margin-bottom:48px;opacity:0;animation:fadeUp 0.8s ease 0.55s forwards;}
+    .cs-meta-row{display:flex;gap:60px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,0.1);padding-top:32px;opacity:0;animation:fadeUp 0.8s ease 0.7s forwards;}
+    .cs-meta-item{display:flex;flex-direction:column;gap:6px;}
+    .cs-meta-label{font-family:var(--mono);font-size:16px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.3);}
+    .cs-meta-val{font-size:16px;color:var(--paper);}
+
+    .cs-body{max-width:900px;margin:0 auto;padding:80px 56px;}
+    .cs-section{margin-bottom:72px;}
+    .section-label{font-family:var(--serif);font-style:italic;font-size:16px;color:var(--muted);letter-spacing:0.02em;margin-bottom:20px;display:block;}
+    .cs-h2{font-family:var(--serif);font-size:clamp(30px,4vw,50px);font-weight:300;line-height:1.1;letter-spacing:-0.02em;margin-bottom:24px;}
+    .cs-h2 em{font-style:italic;color:var(--accent);}
+    .cs-p{font-size:17px;line-height:1.78;color:var(--ink);margin-bottom:20px;}
+    .pull{font-family:var(--serif);font-size:clamp(22px,3vw,34px);font-weight:300;font-style:italic;line-height:1.3;color:var(--accent);margin:48px 0;padding-left:28px;border-left:2px solid var(--accent);}
+
+    .panel{padding:72px 56px;}
+    .panel-dark{background:#0c1e28;color:var(--paper);}
+    .panel-warm{background:var(--paper-warm);}
+    .panel-inner{max-width:900px;margin:0 auto;}
+
+    .moment{background:#13111f;padding:60px 48px;text-align:center;}
+    .moment::before{content:'The moment it clicked';font-family:var(--mono);font-size:16px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(142,133,203,0.5);display:block;margin-bottom:28px;}
+    .moment-text{font-family:var(--serif);font-size:clamp(26px,4vw,48px);font-weight:300;line-height:1.15;color:var(--paper);letter-spacing:-0.01em;}
+    .moment-text em{font-style:italic;}
+
+    /* FRAGMENTATION DIAGRAM */
+    .frag-diagram{background:#0c1e28;border-radius:2px;padding:40px;margin-top:40px;}
+    .frag-diagram-label{font-family:var(--mono);font-size:16px;letter-spacing:0.1em;color:rgba(255,255,255,0.3);margin-bottom:28px;}
+    .frag-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+    .frag-app{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:2px;padding:18px 14px;text-align:center;cursor:pointer;transition:all 0.25s ease;}
+    .frag-app:hover,.frag-app.active{border-color:rgba(74,154,184,0.4);background:rgba(26,107,138,0.15);}
+    .frag-app-icon{font-size:22px;margin-bottom:8px;}
+    .frag-app-name{font-family:var(--mono);font-size:10px;letter-spacing:0.06em;color:rgba(255,255,255,0.4);}
+    .frag-app-type{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,0.2);margin-top:4px;}
+    .frag-count{margin-top:28px;text-align:center;font-family:var(--serif);font-size:36px;font-weight:300;color:rgba(255,255,255,0.15);}
+    .frag-count span{color:var(--accent-light);}
+
+    /* VS COMPARISON */
+    .vs-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:24px;align-items:start;margin-top:48px;}
+    .vs-col-label{font-family:var(--mono);font-size:16px;letter-spacing:0.1em;color:rgba(255,255,255,0.3);margin-bottom:16px;}
+    .vs-col-title{font-family:var(--serif);font-size:26px;font-weight:300;color:var(--paper);margin-bottom:16px;}
+    .vs-col-title.muted{color:rgba(244,240,232,0.4);}
+    .vs-items{list-style:none;}
+    .vs-items li{padding:9px 0;border-bottom:1px solid rgba(255,255,255,0.06);font-size:16px;display:flex;align-items:flex-start;gap:10px;}
+    .vs-items .li-mark{flex-shrink:0;opacity:0.4;}
+    .vs-items li.new .li-mark{opacity:1;color:var(--accent-light);}
+    .vs-divider{font-family:var(--serif);font-size:40px;color:rgba(255,255,255,0.08);padding-top:36px;text-align:center;}
+
+    /* IA DIAGRAM */
+    .ia-diagram{border:1px solid var(--rule);background:var(--paper-deep);padding:40px;margin-top:40px;}
+    .ia-label{font-family:var(--mono);font-size:16px;letter-spacing:0.1em;color:var(--muted);margin-bottom:32px;}
+    .ia-root-node{background:var(--accent);color:white;padding:14px 28px;font-family:var(--mono);font-size:16px;letter-spacing:0.08em;text-align:center;display:inline-block;margin:0 auto;display:block;width:fit-content;margin:0 auto;}
+    .ia-connector-v{width:1px;height:28px;background:var(--rule);margin:0 auto;}
+    .ia-branches{display:flex;position:relative;}
+    .ia-branches::before{content:'';position:absolute;top:0;left:10%;right:10%;height:1px;background:var(--rule);}
+    .ia-branch{flex:1;display:flex;flex-direction:column;align-items:center;}
+    .ia-branch-v{width:1px;height:24px;background:var(--rule);}
+    .ia-module{border:1px solid var(--rule);background:var(--paper);padding:12px 8px;font-family:var(--mono);font-size:10px;letter-spacing:0.06em;text-align:center;width:calc(100% - 8px);transition:border-color 0.2s ease;}
+    .ia-module:hover{border-color:var(--accent);}
+    .ia-sub-v{width:1px;height:20px;background:var(--rule);}
+    .ia-sub{border:1px solid var(--rule);background:var(--paper-warm);padding:9px 6px;font-family:var(--mono);font-size:9px;letter-spacing:0.04em;color:var(--muted);text-align:center;width:calc(100% - 8px);}
+
+    
+.artifact-frame{
+  padding:16px;
+  border:1px solid #d4cdc0;
+  background:#faf8f3;
+  border-radius:12px;
+  margin:40px 0;
+}
+.case-study-image{
+  width:100%;
+  display:block;
+  border-radius:8px;
+}
+    .takeaway-list{margin-top:32px;list-style:none;}
+    .takeaway-list li{display:flex;gap:20px;align-items:flex-start;padding:24px 0;border-bottom:1px solid var(--rule);font-size:17px;line-height:1.6;}
+    .takeaway-list li:first-child{border-top:1px solid var(--rule);}
+    .t-num{font-family:var(--mono);font-size:16px;color:var(--accent);flex-shrink:0;letter-spacing:0.06em;padding-top:3px;}
+
+    .next-project{padding:80px 48px;border-top:1px solid var(--rule);display:flex;justify-content:space-between;align-items:center;}
+    .np-label{font-family:var(--mono);font-size:16px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+    .np-name{font-family:var(--serif);font-size:clamp(32px,4vw,52px);font-weight:300;}
+    .np-link{text-decoration:none;color:var(--ink);}
+    .np-link:hover .np-name{color:var(--accent);}
+    .np-arrow{font-size:48px;color:var(--rule);transition:color 0.2s ease,transform 0.2s ease;}
+    .np-link:hover .np-arrow{color:var(--accent);transform:translate(8px,-8px);}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+    .reveal{opacity:0;transform:translateY(20px);transition:opacity 0.7s ease,transform 0.7s ease;}
+    .reveal.visible{opacity:1;transform:translateY(0);}
+
+    @media(max-width:900px){.cs-hero{padding-left:40px;padding-right:40px;}.cs-body{padding-left:40px;padding-right:40px;}.panel{padding-left:40px;padding-right:40px;}.moment{padding-left:40px;padding-right:40px;}.next-project{padding-left:40px;padding-right:40px;}}@media(max-width:768px){
+      nav.top{padding:16px 24px;}
+      .cs-hero,.cs-body,.panel,.moment,.next-project{padding-left:24px;padding-right:24px;}
+      .cs-hero{padding-top:120px;}
+      .frag-grid{grid-template-columns:repeat(2,1fr);}
+      .vs-grid{grid-template-columns:1fr;}
+      .vs-divider{display:none;}
+      .ia-branches::before{display:none;}
+      .next-project{flex-direction:column;align-items:flex-start;gap:24px;}.cs-meta-row{gap:24px;}.cs-meta-row .cs-meta-item{min-width:calc(50% - 12px);}
+    }
+  @media(max-width:480px){nav.top{padding:12px 20px;}.cs-hero,.cs-body,.panel,.moment,.next-project{padding-left:20px;padding-right:20px;}.cs-hero{padding-top:100px;}.cs-meta-row{flex-direction:column;gap:16px;}.before-after{grid-template-columns:1fr;}.ba-panel+.ba-panel{border-left:none;border-top:1px solid var(--rule);}}</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+<nav class="top">
+  <a href="prequaligy.html" class="nav-back">← Previous</a>
+  <span class="nav-meta">Freelancer Operating System Concept</span>
+  <a href="bookmyshow.html" class="nav-next">Next →</a>
+</nav>
+
+<section class="cs-hero">
+  <div class="cs-hero-bg"></div>
+  <div class="cs-eyebrow">Freelancer Operating System Concept</div>
+  <h1 class="cs-title">FlowDesk</h1>
+  <p class="cs-hook">
+A concept exploring what happens when projects, clients, finances, and operations live in one connected system.
+</p>
+  <div class="cs-meta-row">
+    <div class="cs-meta-item"><span class="cs-meta-label">Type</span><span class="cs-meta-val">Concept Product</span></div>
+    <div class="cs-meta-item"><span class="cs-meta-label">Product Type</span><span class="cs-meta-val">Freelancer Operating System Concept</span></div>
+    <div class="cs-meta-item"><span class="cs-meta-label">Core Insight</span><span class="cs-meta-val">Fewer places, not better tools</span></div>
+  </div>
+</section>
+
+<div class="cs-body">
+  <div class="cs-section reveal">
+    <span class="section-label">The question</span>
+    <h2 class="cs-h2">What if the premise<br>of the market is <em>wrong?</em></h2>
+    <p class="cs-p">The productivity tools market is built on an assumption: better tools lead to better work. More features, smarter automations, tighter integrations. If a freelancer is struggling, they need a better tool.</p>
+    <p class="cs-p">But when I looked at how freelancers actually work, a different picture emerged. They weren't struggling because their tools were bad. They were struggling because their work lived in too many places at once.</p>
+    <p class="cs-p">Projects in Notion. Invoices in Wave or Excel. Clients in Gmail. Tasks in Todoist. Time in Toggl. Contracts in DocuSign. Analytics nowhere. Every tool works. Nothing connects.</p>
+  </div>
+</div>
+
+<!-- MOMENT IT CLICKED -->
+<div class="moment reveal">
+  <div class="moment-text">
+    Freelancers don't have a productivity problem.<br>
+    They have a <em>fragmentation problem.</em>
+  </div>
+</div>
+
+<!-- FRAGMENTATION, DARK -->
+<section class="panel panel-dark">
+  <div class="panel-inner">
+    <span class="section-label" style="color:rgba(255,255,255,0.3);">Where a freelancer's work actually lives</span>
+    <h2 class="cs-h2" style="color:var(--paper);">Eight tools.<br>Eight contexts.<br>Zero unified view.</h2>
+
+    <div class="frag-diagram">
+      <div class="frag-diagram-label">Tools a typical freelancer uses simultaneously, click any to highlight</div>
+      <div class="frag-grid">
+        <div class="frag-app"><div class="frag-app-icon">📋</div><div class="frag-app-name">Notion / Trello</div><div class="frag-app-type">Projects</div></div>
+        <div class="frag-app"><div class="frag-app-icon">✉️</div><div class="frag-app-name">Gmail / Outlook</div><div class="frag-app-type">Clients</div></div>
+        <div class="frag-app"><div class="frag-app-icon">📊</div><div class="frag-app-name">Wave / Excel</div><div class="frag-app-type">Finances</div></div>
+        <div class="frag-app"><div class="frag-app-icon">✅</div><div class="frag-app-name">Todoist / Asana</div><div class="frag-app-type">Tasks</div></div>
+        <div class="frag-app"><div class="frag-app-icon">⏱️</div><div class="frag-app-name">Toggl / Harvest</div><div class="frag-app-type">Time</div></div>
+        <div class="frag-app"><div class="frag-app-icon">📄</div><div class="frag-app-name">DocuSign</div><div class="frag-app-type">Contracts</div></div>
+        <div class="frag-app"><div class="frag-app-icon">💬</div><div class="frag-app-name">Slack / WhatsApp</div><div class="frag-app-type">Comms</div></div>
+        <div class="frag-app"><div class="frag-app-icon">📈</div><div class="frag-app-name">Spreadsheet</div><div class="frag-app-type">Analytics</div></div>
+      </div>
+      <div class="frag-count"><span>8+</span> tools · <span>8+</span> contexts · <span>0</span> unified view</div>
+    </div>
+
+    <div class="vs-grid" style="margin-top:56px;">
+      <div class="vs-col">
+        <div class="vs-col-label">The current reality</div>
+        <div class="vs-col-title muted">Fragmented</div>
+        <ul class="vs-items" style="color:rgba(244,240,232,0.4);">
+          <li><span class="li-mark">·</span>Context-switch 20+ times per day</li>
+          <li><span class="li-mark">·</span>Invoice manually from memory</li>
+          <li><span class="li-mark">·</span>Track time in one app, bill in another</li>
+          <li><span class="li-mark">·</span>Zero visibility into business health</li>
+          <li><span class="li-mark">·</span>Client comms scattered across channels</li>
+        </ul>
+      </div>
+      <div class="vs-divider">vs</div>
+      <div class="vs-col">
+        <div class="vs-col-label">What FlowDesk proposes</div>
+        <div class="vs-col-title">Unified</div>
+        <ul class="vs-items" style="color:rgba(244,240,232,0.8);">
+          <li class="new"><span class="li-mark">→</span>One surface for all active work</li>
+          <li class="new"><span class="li-mark">→</span>Auto-invoicing from tracked time</li>
+          <li class="new"><span class="li-mark">→</span>Time + billing in the same place</li>
+          <li class="new"><span class="li-mark">→</span>Live revenue and cashflow view</li>
+          <li class="new"><span class="li-mark">→</span>Client workspace per project</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IA -->
+<div class="cs-body">
+  <div class="cs-section reveal">
+    <span class="section-label">Information architecture</span>
+    <h2 class="cs-h2">One system.<br>Five modules.<br><em>Zero switching.</em></h2>
+    <p class="cs-p">
+The goal was not to design every screen, but to validate whether a unified
+operating system for freelancers could reduce tool fragmentation and create a
+clearer view of business health.
+</p>
+    <div class="ia-diagram">
+      <div class="ia-label">FlowDesk information architecture</div>
+      <div class="ia-root-node">FlowDesk</div>
+      <div class="ia-connector-v"></div>
+      <div class="ia-branches">
+        <div class="ia-branch"><div class="ia-branch-v"></div><div class="ia-module">Projects</div><div class="ia-sub-v"></div><div class="ia-sub">Active / Archived / Pipeline</div></div>
+        <div class="ia-branch"><div class="ia-branch-v"></div><div class="ia-module">Tasks</div><div class="ia-sub-v"></div><div class="ia-sub">Today / Scheduled / Done</div></div>
+        <div class="ia-branch"><div class="ia-branch-v"></div><div class="ia-module">Clients</div><div class="ia-sub-v"></div><div class="ia-sub">Contacts / Comms / Contracts</div></div>
+        <div class="ia-branch"><div class="ia-branch-v"></div><div class="ia-module">Finances</div><div class="ia-sub-v"></div><div class="ia-sub">Invoices / Expenses / Cashflow</div></div>
+        <div class="ia-branch"><div class="ia-branch-v"></div><div class="ia-module">Analytics</div><div class="ia-sub-v"></div><div class="ia-sub">Revenue / Clients / Time</div></div>
+      </div>
+    </div>
+
+    <div class="pull">The IA isn't a feature. It's the value proposition. The connections between modules create things no single tool can.</div>
+  </div>
+
+  <div class="cs-section reveal">
+    <span class="section-label">Key design decisions</span>
+    <h2 class="cs-h2">Exploring the<br><em>product vision.</em></h2>
+
+<p class="cs-p" style="font-size:15px;color:var(--muted);margin-bottom:32px;">
+Prototype exploration. FlowDesk is a speculative product concept designed to explore how freelancers could manage projects, clients, finances, and operations from a single workspace. The workflows and feature set are still evolving.
+</p>
+<span class="section-label">Experience 01</span>
+   <div class="artifact-frame">
+<img src="./images/flowdesk.png" class="case-study-image">
+</div>
+<p class="cs-p">
+<strong>Experience 01 — Unified Freelancer Dashboard</strong><br>
+A single workspace bringing together tasks, client relationships,
+payments, and business insights.
+</p>
+<span class="section-label">Experience 02</span>
+<div class="artifact-frame">
+  <img src="./images/ClientDirectory.png" class="case-study-image">
+</div>
+<p class="cs-p">
+<strong>Experience 02 — Client Management</strong><br>
+Track client relationships, project activity, revenue,
+and outstanding payments from one place.
+</p>
+<span class="section-label">Experience 03</span>
+<div class="artifact-frame">
+  <img src="./images/ClientPreview.png" class="case-study-image">
+</div>
+<p class="cs-p">
+<strong>Experience 03 — Client Workspace</strong><br>
+Every conversation, project, invoice, and document connected
+to a single client profile.
+</p>
+<span class="section-label">Experience 04</span>
+<div class="artifact-frame">
+  <img src="./images/Analytics.png" class="case-study-image">
+</div>
+<p class="cs-p">
+<strong>Experience 04 — Business Intelligence</strong><br>
+Real-time visibility into revenue, project profitability,
+workload, and growth trends.
+</p>
+
+</div>
+
+<div class="cs-section reveal">
+ 
+    <span class="section-label">Reflections</span>
+    <h2 class="cs-h2">Designing systems, not screens.</h2>
+    <ul class="takeaway-list">
+      <li><span class="t-num">01</span><span>Problem reframing is a design skill. The freelancer productivity market is full of solutions to the wrong problem. Asking "what if the premise is wrong?" is where this project began.</span></li>
+      <li><span class="t-num">02</span><span>Information architecture can be the product. FlowDesk isn't a UI concept, it's an IA concept. The value is the structure, not the screens.</span></li>
+      <li><span class="t-num">03</span><span>Unified systems are only valuable if the connections between modules create emergent value. The time-to-invoice bridge isn't a feature, it's the whole point.</span></li>
+      <li><span class="t-num">04</span><span>Designing concept products sharpens principles-first thinking. Without real product constraints, every decision has to be justified by logic rather than business requirements.</span></li>
+    </ul>
+  </div>
+</div>
+
+<div class="next-project">
+  <div>
+    <div class="np-label">Next investigation</div>
+    <a href="bookmyshow.html" class="np-link"><div class="np-name">BookMyShow →</div></a>
+  </div>
+  <a href="bookmyshow.html" class="np-link"><div class="np-arrow">↗</div></a>
+</div>
+
+<script>
+  window.addEventListener('scroll',()=>{ document.getElementById('progress').style.width=(window.scrollY/(document.body.scrollHeight-window.innerHeight)*100)+'%'; });
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});
+  },{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+  document.querySelectorAll('.frag-app').forEach(a=>a.addEventListener('click',()=>a.classList.toggle('active')));
+</script>
+</body>
+</html>

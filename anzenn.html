@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anzenn, Aashka Thakkar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500&family=Space+Mono:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --ink:#0f0e0c;--paper:#f4f0e8;--paper-warm:#ede8dc;--paper-deep:#e4ddd0;
+      --accent:#8E85CB;--accent-light:#b8b4e0;--muted:#8a8070;--rule:#d4cdc0;
+      --serif:'Cormorant Garamond',Georgia,serif;--sans:'Inter',system-ui,sans-serif;--mono:'Space Mono',monospace;
+    }
+    html{scroll-behavior:smooth;}
+    body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.65;overflow-x:hidden;}
+
+    .progress-bar{position:fixed;top:0;left:0;height:2px;background:var(--accent);z-index:200;width:0%;transition:width 0.1s linear;}
+    nav.top{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:22px 48px;background:rgba(244,240,232,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--rule);}
+    .nav-back{font-family:var(--mono);font-size:16px;letter-spacing:0.08em;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+    .nav-back:hover{color:var(--ink);}
+    .nav-meta{font-family:var(--mono);font-size:16px;letter-spacing:0.06em;color:var(--muted);}
+    .nav-next{font-family:var(--mono);font-size:16px;letter-spacing:0.08em;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+    .nav-next:hover{color:var(--ink);}
+
+    .cs-hero{min-height:100vh;padding:140px 48px 80px;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden;background:#0f0e14;}
+    .cs-hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 30% 60%,rgba(142,133,203,0.16) 0%,transparent 65%);}
+    .cs-eyebrow{font-family:var(--mono);font-size:16px;letter-spacing:0.14em;color:var(--accent-light);margin-bottom:24px;opacity:0;animation:fadeUp 0.7s ease 0.2s forwards;}
+    .cs-title{font-family:var(--serif);font-size:clamp(60px,9vw,120px);font-weight:300;line-height:0.95;letter-spacing:-0.03em;color:var(--paper);margin-bottom:24px;opacity:0;animation:fadeUp 0.8s ease 0.4s forwards;}
+    .cs-hook{font-family:var(--serif);font-style:italic;font-size:clamp(20px,2.5vw,28px);color:var(--accent-light);font-weight:300;line-height:1.3;margin-bottom:48px;opacity:0;animation:fadeUp 0.8s ease 0.55s forwards;}
+    .cs-meta-row{display:flex;gap:60px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,0.1);padding-top:32px;opacity:0;animation:fadeUp 0.8s ease 0.7s forwards;}
+    .cs-meta-item{display:flex;flex-direction:column;gap:6px;}
+    .cs-meta-label{font-family:var(--mono);font-size:16px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.3);}
+    .cs-meta-val{font-size:16px;color:var(--paper);}
+
+    .cs-body{max-width:900px;margin:0 auto;padding:80px 56px;}
+    .cs-section{margin-bottom:72px;}
+    .section-label{font-family:var(--serif);font-style:italic;font-size:16px;color:var(--muted);letter-spacing:0.02em;margin-bottom:20px;display:block;}
+    .cs-h2{font-family:var(--serif);font-size:clamp(30px,4vw,50px);font-weight:300;line-height:1.1;letter-spacing:-0.02em;margin-bottom:24px;}
+    .cs-h2 em{font-style:italic;color:var(--accent);}
+    .cs-p{font-size:17px;line-height:1.78;color:var(--ink);margin-bottom:20px;}
+    .pull{font-family:var(--serif);font-size:clamp(22px,3vw,34px);font-weight:300;font-style:italic;line-height:1.3;color:var(--accent);margin:48px 0;padding-left:28px;border-left:2px solid var(--accent);}
+
+    .panel{padding:72px 56px;}
+    .panel-dark{background:#0d1f1a;color:var(--paper);}
+    .panel-warm{background:var(--paper-warm);}
+    .panel-inner{max-width:900px;margin:0 auto;}
+
+    /* MOMENT */
+    .moment{background:#13111f;padding:60px 48px;text-align:center;}
+    .moment::before{content:'The moment it clicked';font-family:var(--mono);font-size:16px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(142,133,203,0.5);display:block;margin-bottom:28px;}
+    .moment-text{font-family:var(--serif);font-size:clamp(26px,4vw,48px);font-weight:300;line-height:1.15;color:var(--paper);letter-spacing:-0.01em;}
+    .moment-text em{font-style:italic;}
+
+    /* FINDINGS LIST */
+    .findings-list{margin-top:40px;}
+    .finding-item{display:grid;grid-template-columns:48px 1fr;gap:0 20px;border-bottom:1px solid rgba(255,255,255,0.07);padding:26px 0;opacity:0;transform:translateY(10px);transition:opacity 0.5s ease,transform 0.5s ease;}
+    .finding-item.warm-item{border-bottom-color:var(--rule);}
+    .finding-item.visible{opacity:1;transform:translateY(0);}
+    .finding-n{font-family:var(--mono);font-size:16px;letter-spacing:0.1em;padding-top:2px;}
+    .finding-n-dark{color:var(--accent-light);}
+    .finding-n-warm{color:var(--accent);}
+    .finding-text{font-size:17px;line-height:1.6;}
+    .finding-link{margin-top:7px;font-family:var(--mono);font-size:16px;color:var(--accent-light);letter-spacing:0.06em;}
+    .finding-link.warm{color:var(--accent);}
+
+    /* PRINCIPLES */
+    .principles-trio{display:grid;grid-template-columns:repeat(3,1fr);gap:0;background:var(--rule);margin-top:40px;}
+    .principle-card{background:var(--paper);padding:40px 32px;border-top:3px solid transparent;transition:border-color 0.3s ease;}
+    .principle-card:hover{border-color:var(--accent);}
+    .principle-num{font-family:var(--mono);font-size:16px;color:var(--muted);letter-spacing:0.1em;margin-bottom:16px;}
+    .principle-name{font-family:var(--serif);font-size:26px;font-weight:400;line-height:1.15;margin-bottom:12px;}
+    .principle-name em{font-style:italic;color:var(--accent);}
+    .principle-desc{font-size:16px;color:var(--muted);line-height:1.6;}
+
+    /* EVIDENCE BOARD */
+    .evidence-board{margin-top:48px;}
+    .evidence-board-label{font-family:var(--mono);font-size:16px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:32px;}
+    .evidence-chain{display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;gap:0;align-items:start;}
+    .evidence-node{border:1px solid rgba(255,255,255,0.1);padding:24px 20px;}
+    .ev-tag{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent-light);margin-bottom:10px;}
+    .ev-text{font-size:16px;line-height:1.55;color:rgba(244,240,232,0.8);}
+    .ev-arrow-animated{display:flex;align-items:center;justify-content:center;padding:0 10px;padding-top:32px;}
+    .ev-arrow-svg{overflow:visible;}
+    .ev-arrow-path{stroke:var(--accent-light);stroke-width:1;fill:none;stroke-dasharray:40;stroke-dashoffset:40;}
+
+ 
+
+    .case-study-image{
+      width:100%;
+      display:block;
+      border:1px solid #d4cdc0;
+      border-radius:12px;
+      background:#f8f5ee;
+    }
+
+    .artifact-frame{
+      padding:16px;
+      border:1px solid #d4cdc0;
+      background:#faf8f3;
+      border-radius:12px;
+      margin:40px 0;
+    }
+    .mobile-showcase{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:24px;
+      margin:40px 0;
+    }
+    .mobile-showcase .case-study-image{
+      height:520px;
+      object-fit:contain;
+    }
+
+    .takeaway-list{margin-top:32px;list-style:none;}
+    .takeaway-list li{display:flex;gap:20px;align-items:flex-start;padding:24px 0;border-bottom:1px solid var(--rule);font-size:17px;line-height:1.6;}
+    .takeaway-list li:first-child{border-top:1px solid var(--rule);}
+    .t-num{font-family:var(--mono);font-size:16px;color:var(--accent);flex-shrink:0;letter-spacing:0.06em;padding-top:3px;}
+
+    .next-project{padding:80px 48px;border-top:1px solid var(--rule);display:flex;justify-content:space-between;align-items:center;}
+    .np-label{font-family:var(--mono);font-size:16px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+    .np-name{font-family:var(--serif);font-size:clamp(32px,4vw,52px);font-weight:300;}
+    .np-link{text-decoration:none;color:var(--ink);}
+    .np-link:hover .np-name{color:var(--accent);}
+    .np-arrow{font-size:48px;color:var(--rule);transition:color 0.2s ease,transform 0.2s ease;}
+    .np-link:hover .np-arrow{color:var(--accent);transform:translate(8px,-8px);}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+    .reveal{opacity:0;transform:translateY(20px);transition:opacity 0.7s ease,transform 0.7s ease;}
+    .reveal.visible{opacity:1;transform:translateY(0);}
+
+    @media(max-width:900px){.cs-hero{padding-left:40px;padding-right:40px;}.cs-body{padding-left:40px;padding-right:40px;}.panel{padding-left:40px;padding-right:40px;}.moment{padding-left:40px;padding-right:40px;}.next-project{padding-left:40px;padding-right:40px;}}@media(max-width:768px){
+      nav.top{padding:16px 24px;}
+      .mobile-showcase{
+  grid-template-columns:1fr;
+}
+      .cs-hero,.cs-body,.panel,.moment,.next-project{padding-left:24px;padding-right:24px;}
+      .cs-hero{padding-top:120px;}
+      .principles-trio{grid-template-columns:1fr;}
+      .evidence-chain{grid-template-columns:1fr;}
+      .ev-arrow-animated{display:none;}
+      .next-project{flex-direction:column;align-items:flex-start;gap:24px;}.cs-meta-row{gap:24px;}.cs-meta-row .cs-meta-item{min-width:calc(50% - 12px);}
+    }
+  @media(max-width:480px){nav.top{padding:12px 20px;}.cs-hero,.cs-body,.panel,.moment,.next-project{padding-left:20px;padding-right:20px;}.cs-hero{padding-top:100px;}.cs-meta-row{flex-direction:column;gap:16px;}.before-after{grid-template-columns:1fr;}.ba-panel+.ba-panel{border-left:none;border-top:1px solid var(--rule);}}</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+<nav class="top">
+  <a href="asuretify.html" class="nav-back">← Previous</a>
+  <span class="nav-meta">AI-Powered Mobile Inspection App</span>
+  <a href="prequaligy.html" class="nav-next">Next →</a>
+</nav>
+
+<section class="cs-hero">
+  <div class="cs-hero-bg"></div>
+  <div class="cs-eyebrow">AI-Powered Mobile Inspection App</div>
+  <h1 class="cs-title">Anzenn</h1>
+<p class="cs-hook">
+  Transforming safety inspections from documentation-heavy workflows into AI-assisted field experiences.
+</p>
+  <div class="cs-meta-row">
+    <div class="cs-meta-item"><span class="cs-meta-label">Role</span><span class="cs-meta-val">UX Designer</span></div>
+    <div class="cs-meta-item"><span class="cs-meta-label">Product Type</span><span class="cs-meta-val">AI-Powered Mobile Inspection App</span></div>
+    <div class="cs-meta-item"><span class="cs-meta-label">Platform</span><span class="cs-meta-val">Mobile, Field Use</span></div>
+    <div class="cs-meta-item"><span class="cs-meta-label">Structure</span><span class="cs-meta-val">7 Findings → 7 Decisions · 3 Principles</span></div>
+  </div>
+</section>
+
+<div class="cs-body">
+  <div class="cs-section reveal">
+    <span class="section-label">The situation</span>
+    <h2 class="cs-h2">The goal wasn't to build<br>a better camera app.</h2>
+    <p class="cs-p">Safety inspectors in construction work under real pressure. They're on site with equipment and hazards around them, documentation requirements following them everywhere. The expectation is that they capture, annotate, and report accurately, without losing the pace of the inspection itself.</p>
+    <p class="cs-p">Anzenn needed to fit into that reality. Not sit on top of it.</p>
+    <p class="cs-p">This project was driven independently. There was no Business Analyst involved in discovery or requirements gathering. I conducted the research, synthesized findings, identified workflow patterns, defined the problem space, and translated those insights into product decisions and interface concepts.</p>
+  </div>
+</div>
+
+<!-- MOMENT IT CLICKED -->
+<div class="moment reveal">
+  <div class="moment-text">
+    Inspectors don't need another camera app.<br>
+    They need <em>less documentation work.</em>
+  </div>
+</div>
+
+<!-- 7 FINDINGS, DARK -->
+<section class="panel panel-dark">
+  <div class="panel-inner">
+    <span class="section-label" style="color:rgba(255,255,255,0.3);">What the field actually looks like</span>
+    <h2 class="cs-h2" style="color:var(--paper);">Seven findings from<br>watching inspectors work.</h2>
+
+    <!-- Evidence board -->
+    <div class="evidence-board" id="evidenceBoard">
+      <div class="evidence-board-label">Evidence board, root cause trace</div>
+      <div class="evidence-chain">
+        <div class="evidence-node">
+          <div class="ev-tag">Observation</div>
+          <div class="ev-text">Inspectors take photos during rounds but write notes separately, hours later</div>
+        </div>
+        <div class="ev-arrow-animated">
+          <svg class="ev-arrow-svg" width="32" height="16" viewBox="0 0 32 16"><path class="ev-arrow-path" d="M0 8 L24 8 M18 2 L24 8 L18 14"/></svg>
+        </div>
+        <div class="evidence-node">
+          <div class="ev-tag">Evidence</div>
+          <div class="ev-text">Documentation deferred = memory-dependent reporting = errors and omissions in final reports</div>
+        </div>
+        <div class="ev-arrow-animated">
+          <svg class="ev-arrow-svg" width="32" height="16" viewBox="0 0 32 16"><path class="ev-arrow-path" d="M0 8 L24 8 M18 2 L24 8 L18 14"/></svg>
+        </div>
+        <div class="evidence-node">
+          <div class="ev-tag">Insight</div>
+          <div class="ev-text">The gap between capture and context is where accuracy dies, annotation must happen at the moment of capture</div>
+        </div>
+        <div class="ev-arrow-animated">
+          <svg class="ev-arrow-svg" width="32" height="16" viewBox="0 0 32 16"><path class="ev-arrow-path" d="M0 8 L24 8 M18 2 L24 8 L18 14"/></svg>
+        </div>
+        <div class="evidence-node">
+          <div class="ev-tag">Decision</div>
+          <div class="ev-text">Inline annotation, tag, voice note, severity, must complete before returning to the checklist</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="findings-list" style="margin-top:56px;">
+      <div class="finding-item">
+        <span class="finding-n finding-n-dark">F-01</span>
+        <div class="finding-text" style="color:rgba(244,240,232,0.85);"><strong>Inspectors context-switch constantly.</strong> Physical observation, device interaction, verbal communication, sometimes within seconds. Tools that demand sustained attention fail in the field.</div>
+      </div>
+      <div class="finding-item">
+        <span class="finding-n finding-n-dark">F-02</span>
+        <div class="finding-text" style="color:rgba(244,240,232,0.85);"><strong>Documentation is deferred.</strong> Most inspectors capture photos in the moment and document later, creating a memory load that directly increases errors and omissions in reports.</div>
+      </div>
+      <div class="finding-item">
+        <span class="finding-n finding-n-dark">F-03</span>
+        <div class="finding-text" style="color:rgba(244,240,232,0.85);"><strong>The checklist mental model is deeply entrenched.</strong> Inspectors think in items to complete, not forms to fill. Navigation that fights this creates friction at exactly the wrong moment.</div>
+      </div>
+      <div class="finding-item">
+        <span class="finding-n finding-n-dark">F-04</span>
+        <div class="finding-text" style="color:rgba(244,240,232,0.85);"><strong>Photo annotation is a significant pain point.</strong> Adding context to photos after the fact requires navigating away from the inspection flow, losing momentum on the round.</div>
+      </div>
+      <div class="finding-item">
+        <span class="finding-n finding-n-dark">F-05</span>
+        <div class="finding-text" style="color:rgba(244,240,232,0.85);"><strong>Report generation is treated as a separate task.</strong> The gap between "inspection complete" and "report submitted" introduces compliance risk. Inspectors deprioritize it under time pressure.</div>
+      </div>
+      <div class="finding-item">
+        <span class="finding-n finding-n-dark">F-06</span>
+        <div class="finding-text" style="color:rgba(244,240,232,0.85);"><strong>Status visibility matters at a glance.</strong> Inspectors need to know what's done, what's pending, what's flagged, without expanding any item or digging into sub-menus.</div>
+      </div>
+      <div class="finding-item" style="border-bottom:none;">
+        <span class="finding-n finding-n-dark">F-07</span>
+        <div class="finding-text" style="color:rgba(244,240,232,0.85);"><strong>Connectivity is unreliable on site.</strong> Any feature requiring a live connection to function creates a single point of failure in a workflow where failure has real consequences.</div>
+      </div>
+    </div>
+
+    <!-- Field research artifact image -->
+    <div class="artifact-frame">
+      <img src="images/Anzennworkflow.png"
+           alt="Anzenn Workflow Research"
+           class="case-study-image">
+    </div>
+  </div>
+</section>
+
+<!-- PRINCIPLES -->
+<div style="padding:0 48px 0;">
+  <div class="cs-body" style="padding-bottom:0;">
+    <span class="section-label reveal">Three principles that governed every decision</span>
+  </div>
+  <div class="principles-trio">
+    <div class="principle-card">
+      <div class="principle-num">Principle 01</div>
+      <div class="principle-name">Capture now,<br><em>structure later.</em></div>
+      <div class="principle-desc">Minimize the work at the moment of capture. Log fast and raw. Structure happens in the background, after the pressure is off.</div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-num">Principle 02</div>
+      <div class="principle-name">The checklist<br><em>is the interface.</em></div>
+      <div class="principle-desc">Don't fight the mental model. Build navigation around the inspector's existing cognitive framework, not over it.</div>
+    </div>
+    <div class="principle-card">
+      <div class="principle-num">Principle 03</div>
+      <div class="principle-name">Offline-first<br><em>by default.</em></div>
+      <div class="principle-desc">Every critical action must work without a connection. Sync when available. Never block the workflow on connectivity.</div>
+    </div>
+  </div>
+</div>
+
+<!-- 7 DECISIONS, WARM -->
+<section class="panel panel-warm" style="margin-top:0;">
+  <div class="panel-inner">
+    <span class="section-label">Seven design decisions, one per finding</span>
+    <h2 class="cs-h2">Each finding.<br>One decision.</h2>
+    <div class="findings-list">
+      <div class="finding-item warm-item">
+        <span class="finding-n finding-n-warm">D-01</span>
+        <div class="finding-text"><strong>One-tap capture mode.</strong> A persistent camera button accessible from anywhere in the app without navigating away from context.<div class="finding-link warm">↳ responds to F-01</div></div>
+      </div>
+      <div class="finding-item warm-item">
+        <span class="finding-n finding-n-warm">D-02</span>
+        <div class="finding-text"><strong>Inline annotation within capture.</strong> Voice note, text tag, severity flag, all before returning to checklist. Annotation and capture happen in one unbroken moment.<div class="finding-link warm">↳ responds to F-02, F-04</div></div>
+      </div>
+      <div class="finding-item warm-item">
+        <span class="finding-n finding-n-warm">D-03</span>
+        <div class="finding-text"><strong>Checklist-first navigation.</strong> The home screen is the checklist. Not a dashboard, not a summary. The inspector's first view is their first action.<div class="finding-link warm">↳ responds to F-03</div></div>
+      </div>
+      <div class="finding-item warm-item">
+        <span class="finding-n finding-n-warm">D-04</span>
+        <div class="finding-text"><strong>Report auto-drafts in background.</strong> As items complete and media is captured, the report compiles automatically. Submission becomes one action at the end, not a separate task.<div class="finding-link warm">↳ responds to F-05</div></div>
+      </div>
+      <div class="finding-item warm-item">
+        <span class="finding-n finding-n-warm">D-05</span>
+        <div class="finding-text"><strong>Status ring on each item.</strong> Untouched, in progress, flagged, complete, visible without expanding any item.<div class="finding-link warm">↳ responds to F-06</div></div>
+      </div>
+      <div class="finding-item warm-item">
+        <span class="finding-n finding-n-warm">D-06</span>
+        <div class="finding-text"><strong>Full offline capability.</strong> Local storage for all captured media and checklist state. Sync indicator, not sync gate.<div class="finding-link warm">↳ responds to F-07</div></div>
+      </div>
+      <div class="finding-item warm-item" style="border-bottom:none;">
+        <span class="finding-n finding-n-warm">D-07</span>
+        <div class="finding-text"><strong>Severity triage at the point of discovery.</strong> When flagging an item, severity is chosen immediately, not during report review. Triage happens when the context is freshest.<div class="finding-link warm">↳ responds to F-02, F-06</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KEY SCREENS -->
+<div class="cs-body">
+  <div class="cs-section reveal">
+    <span class="section-label">Design evolution</span>
+    <h2 class="cs-h2">Where principles<br>become <em>interface.</em></h2>
+
+    <h3 style="font-family:var(--serif);font-size:32px;font-weight:400;margin:40px 0 12px;">
+      Wireframe Evolution
+    </h3>
+    <p class="cs-p">
+      Early exploration focused on reducing documentation overhead and keeping inspectors inside the inspection flow.
+    </p>
+    <div class="mobile-showcase">
+      <div class="artifact-frame">
+        <img src="images/Group 2.png"
+             alt="Dashboard Wireframe"
+             class="case-study-image">
+      </div>
+      <div class="artifact-frame">
+        <img src="images/Group 1261158040.png"
+             alt="Camera Flow Wireframe"
+             class="case-study-image">
+      </div>
+    </div>
+    <h3 style="font-family:var(--serif);font-size:32px;font-weight:400;margin:60px 0 12px;">
+      Final Product Experience
+    </h3>
+    <p class="cs-p">
+      The final experience transformed research findings into a streamlined inspection workflow powered by AI-assisted documentation.
+    </p>
+    <div class="mobile-showcase">
+      <div class="artifact-frame">
+        <img src="images/Group 1261158044.png"
+             alt="Inspection Checklist"
+             class="case-study-image">
+      </div>
+      <div class="artifact-frame">
+        <img src="images/Group 1261158045.png"
+             alt="Camera Experience"
+             class="case-study-image">
+      </div>
+      <div class="artifact-frame">
+        <img src="images/Group 1261158043.png"
+             alt="AI Detection"
+             class="case-study-image">
+      </div>
+      <div class="artifact-frame">
+        <img src="images/Group 1261158046.png"
+             alt="Report Generation"
+             class="case-study-image">
+      </div>
+    </div>
+  </div>
+
+    <div class="cs-section reveal">
+    <span class="section-label">Reflections</span>
+    <h2 class="cs-h2">Designing for field conditions.</h2>
+    <ul class="takeaway-list">
+      <li><span class="t-num">01</span><span>Field context changes everything. A feature that seems helpful in a product review session can create friction in the actual environment of use. Observe the context, not just the task.</span></li>
+      <li><span class="t-num">02</span><span>Mental models are constraints that look like opportunities. Fighting the checklist model would have made the product harder to use. Embracing it made it faster to learn.</span></li>
+      <li><span class="t-num">03</span><span>"Capture now, structure later" is one of the most underused ideas in workflow design. The moment of data entry and the moment of data organization are different cognitive modes. Design for both separately.</span></li>
+      <li><span class="t-num">04</span><span>7 findings → 7 decisions is a discipline. It forces you to trace every design choice back to something observed, not something assumed.</span></li>
+    </ul>
+  </div>
+</div>
+
+<div class="next-project">
+  <div>
+    <div class="np-label">Next investigation</div>
+    <a href="prequaligy.html" class="np-link"><div class="np-name">Prequaligy →</div></a>
+  </div>
+  <a href="prequaligy.html" class="np-link"><div class="np-arrow">↗</div></a>
+</div>
+
+<script>
+  window.addEventListener('scroll',()=>{ document.getElementById('progress').style.width=(window.scrollY/(document.body.scrollHeight-window.innerHeight)*100)+'%'; });
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});
+  },{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.reveal,.finding-item').forEach(el=>obs.observe(el));
+  const ebObs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.querySelectorAll('.ev-arrow-path').forEach((path,i)=>{
+          setTimeout(()=>{ path.style.transition=`stroke-dashoffset 0.5s ease ${i*0.2}s`; path.style.strokeDashoffset='0'; },i*200+200);
+        });
+        ebObs.unobserve(e.target);
+      }
+    });
+  },{threshold:0.3});
+  document.querySelectorAll('.evidence-board').forEach(el=>ebObs.observe(el));
+</script>
+</body>
+</html>

@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prequaligy, Aashka Thakkar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500&family=Space+Mono:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --ink:#0f0e0c;--paper:#f4f0e8;--paper-warm:#ede8dc;--paper-deep:#e4ddd0;
+      --accent:#8E85CB;--accent-light:#b8b4e0;--muted:#8a8070;--rule:#d4cdc0;
+      --serif:'Cormorant Garamond',Georgia,serif;--sans:'Inter',system-ui,sans-serif;--mono:'Space Mono',monospace;
+    }
+    html{scroll-behavior:smooth;}
+    body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.65;overflow-x:hidden;}
+
+    .progress-bar{position:fixed;top:0;left:0;height:2px;background:var(--accent);z-index:200;width:0%;transition:width 0.1s linear;}
+    nav.top{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:22px 48px;background:rgba(244,240,232,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--rule);}
+    .nav-back{font-family:var(--mono);font-size:16px;letter-spacing:0.08em;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+    .nav-back:hover{color:var(--ink);}
+    .nav-meta{font-family:var(--mono);font-size:16px;letter-spacing:0.06em;color:var(--muted);}
+    .nav-next{font-family:var(--mono);font-size:16px;letter-spacing:0.08em;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+    .nav-next:hover{color:var(--ink);}
+
+    .cs-hero{min-height:100vh;padding:140px 48px 80px;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden;background:#0f0e14;}
+    .cs-hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 60% 40%,rgba(142,133,203,0.18) 0%,transparent 65%);}
+    .cs-eyebrow{font-family:var(--mono);font-size:16px;letter-spacing:0.14em;color:var(--accent-light);margin-bottom:24px;opacity:0;animation:fadeUp 0.7s ease 0.2s forwards;}
+    .cs-title{font-family:var(--serif);font-size:clamp(60px,9vw,120px);font-weight:300;line-height:0.95;letter-spacing:-0.03em;color:var(--paper);margin-bottom:24px;opacity:0;animation:fadeUp 0.8s ease 0.4s forwards;}
+    .cs-hook{font-family:var(--serif);font-style:italic;font-size:clamp(20px,2.5vw,28px);color:var(--accent-light);font-weight:300;line-height:1.3;margin-bottom:48px;opacity:0;animation:fadeUp 0.8s ease 0.55s forwards;}
+    .cs-meta-row{display:flex;gap:60px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,0.1);padding-top:32px;opacity:0;animation:fadeUp 0.8s ease 0.7s forwards;}
+    .cs-meta-item{display:flex;flex-direction:column;gap:6px;}
+    .cs-meta-label{font-family:var(--mono);font-size:16px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.3);}
+    .cs-meta-val{font-size:16px;color:var(--paper);}
+
+    .cs-body{max-width:1100px;margin:0 auto;padding:80px 56px;}
+    .cs-section{margin-bottom:72px;}
+    .section-label{font-family:var(--serif);font-style:italic;font-size:16px;color:var(--muted);letter-spacing:0.02em;margin-bottom:20px;display:block;}
+    .cs-h2{font-family:var(--serif);font-size:clamp(30px,4vw,50px);font-weight:300;line-height:1.1;letter-spacing:-0.02em;margin-bottom:24px;}
+    .cs-h2 em{font-style:italic;color:var(--accent);}
+    .cs-p{font-size:17px;line-height:1.78;color:var(--ink);margin-bottom:20px;}
+    .pull{font-family:var(--serif);font-size:clamp(22px,3vw,34px);font-weight:300;font-style:italic;line-height:1.3;color:var(--accent);margin:48px 0;padding-left:28px;border-left:2px solid var(--accent);}
+
+    .panel{padding:72px 56px;}
+    .panel-dark{background:#1a1428;color:var(--paper);}
+    .panel-dark .cs-p{color:rgba(244,240,232,0.88);}
+    .panel-dark .cs-h2{color:var(--paper);}
+    .panel-dark .section-label{color:rgba(244,240,232,0.6);}
+    .panel-warm{background:var(--paper-warm);}
+    .panel-inner{max-width:1100px;margin:0 auto;}
+
+    .moment{background:#13111f;padding:60px 48px;text-align:center;}
+    .moment::before{content:'The moment it clicked';font-family:var(--mono);font-size:16px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(142,133,203,0.5);display:block;margin-bottom:28px;}
+    .moment-text{font-family:var(--serif);font-size:clamp(26px,4vw,48px);font-weight:300;line-height:1.15;color:var(--paper);letter-spacing:-0.01em;}
+    .moment-text em{font-style:italic;}
+
+    /* INTERACTIVE STAKEHOLDER CARDS */
+    .sh-map{display:grid;grid-template-columns:repeat(3,1fr);gap:0;background:rgba(255,255,255,0.04);margin-top:40px;}
+    .sh-card{padding:32px 28px;cursor:pointer;transition:background 0.3s ease;border-top:2px solid transparent;position:relative;}
+    .sh-card:hover,.sh-card.active{background:rgba(90,74,140,0.15);border-top-color:var(--accent-light);}
+    .sh-role{font-family:var(--mono);font-size:16px;letter-spacing:0.1em;color:var(--accent-light);margin-bottom:12px;}
+    .sh-name{font-family:var(--serif);font-size:28px;font-weight:400;color:var(--paper);margin-bottom:14px;}
+    .sh-teaser{font-size:16px;color:rgba(244,240,232,0.4);line-height:1.5;}
+    .sh-pain{display:none;font-size:16px;line-height:1.6;color:rgba(244,240,232,0.75);}
+    .sh-pain li{padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);list-style:none;display:flex;gap:10px;}
+    .sh-pain li::before{content:'·';color:var(--accent-light);flex-shrink:0;}
+    .sh-card.active .sh-pain{display:block;}
+    .sh-card.active .sh-teaser{display:none;}
+
+    /* EVIDENCE BOARD */
+    .evidence-board{margin-top:48px;}
+    .evidence-board-label{font-family:var(--mono);font-size:16px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:32px;}
+    .evidence-chain{display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;gap:0;align-items:start;}
+    .evidence-node{border:1px solid rgba(255,255,255,0.1);padding:24px 20px;}
+    .evidence-node.warm{border-color:var(--rule);background:var(--paper);}
+    .ev-tag{font-family:var(--mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent-light);margin-bottom:10px;}
+    .ev-tag.warm{color:var(--accent);}
+    .ev-text{font-size:16px;line-height:1.55;color:rgba(244,240,232,0.8);}
+    .ev-text.dark{color:var(--ink);}
+    .ev-arrow-animated{display:flex;align-items:center;justify-content:center;padding:0 10px;padding-top:32px;}
+    .ev-arrow-svg{overflow:visible;}
+    .ev-arrow-path{stroke:var(--accent-light);stroke-width:1;fill:none;stroke-dasharray:40;stroke-dashoffset:40;}
+
+    /* SHORTFLOW REVEAL */
+    .shortflow{background:var(--accent);padding:60px 48px;text-align:center;}
+    .sf-word{font-family:var(--serif);font-size:clamp(48px,8vw,100px);font-weight:300;letter-spacing:-0.02em;line-height:1;color:white;}
+    .sf-sub{font-family:var(--mono);font-size:16px;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-top:16px;}
+
+    /* GOALS */
+    .goals-list{margin-top:40px;}
+    .goal-item{display:grid;grid-template-columns:48px 1fr;gap:24px;padding:28px 0;border-bottom:1px solid var(--rule);opacity:0;transform:translateX(-12px);transition:opacity 0.5s ease,transform 0.5s ease;}
+    .goal-item.visible{opacity:1;transform:translateX(0);}
+    .goal-n{font-family:var(--mono);font-size:16px;color:var(--accent);letter-spacing:0.06em;padding-top:2px;}
+    .goal-text{font-size:17px;line-height:1.6;}
+    .goal-text strong{font-weight:500;}
+    .goal-sub{font-size:16px;color:var(--muted);margin-top:7px;line-height:1.55;}
+
+    /* IMG PLACEHOLDERS */
+    .img-placeholder{border:1px solid var(--rule);background:var(--paper-deep);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:48px 32px;margin:40px 0;position:relative;}
+    .img-placeholder.tall{min-height:320px;}
+    .img-placeholder.medium{min-height:220px;}
+    .img-placeholder.wide{min-height:260px;}
+    .img-placeholder-label{font-family:var(--mono);font-size:16px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+    .img-placeholder-desc{font-size:16px;color:rgba(138,128,112,0.6);line-height:1.5;max-width:320px;}
+    .img-placeholder-corner{position:absolute;width:16px;height:16px;border-color:var(--rule);border-style:solid;}
+    .img-placeholder-corner.tl{top:8px;left:8px;border-width:1px 0 0 1px;}
+    .img-placeholder-corner.tr{top:8px;right:8px;border-width:1px 1px 0 0;}
+    .img-placeholder-corner.bl{bottom:8px;left:8px;border-width:0 0 1px 1px;}
+    .img-placeholder-corner.br{bottom:8px;right:8px;border-width:0 1px 1px 0;}
+    .img-placeholder.dark{background:rgba(255,255,255,0.03);border-color:rgba(255,255,255,0.08);}
+    .img-placeholder.dark .img-placeholder-label{color:rgba(255,255,255,0.3);}
+    .img-placeholder.dark .img-placeholder-desc{color:rgba(255,255,255,0.15);}
+    .img-placeholder.dark .img-placeholder-corner{border-color:rgba(255,255,255,0.1);}
+
+    .case-study-image,
+    .case-study-image-flow,
+    .case-study-gallery img {
+      width: 100%;
+      height: auto;
+      max-height: 720px;
+      object-fit: contain;
+      display: block;
+      border: 1px solid #d4cdc0;
+      border-radius: 12px;
+      background: #ffffff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      margin: 40px 0;
+    }
+
+    .case-study-gallery {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .mobile-screen {
+      width: 320px;
+      max-width: 100%;
+      margin: 40px auto;
+    }
+
+.artifact-frame {
+  padding: 24px;
+  border: 1px solid #d4cdc0;
+  background: #faf8f3;
+  border-radius: 12px;
+  margin: 32px 0;
+  overflow: hidden;
+}
+
+
+.flow-diagram {
+  width: 100%;
+  height: 320px;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  margin: 0 auto;
+}
+
+.flow-diagram-full {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 32px 0;
+  border: 1px solid #d4cdc0;
+  border-radius: 12px;
+  background: #fff;
+}
+
+
+.shortflow-image {
+  width: 100%;
+  height: auto;
+  max-height: 900px;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+}
+
+.shortflow-image-full {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 32px 0;
+  border: 1px solid #d4cdc0;
+  border-radius: 12px;
+  background: #fff;
+}
+
+    .takeaway-list{margin-top:32px;list-style:none;}
+    .takeaway-list li{display:flex;gap:20px;align-items:flex-start;padding:24px 0;border-bottom:1px solid var(--rule);font-size:17px;line-height:1.6;}
+    .takeaway-list li:first-child{border-top:1px solid var(--rule);}
+    .t-num{font-family:var(--mono);font-size:16px;color:var(--accent);flex-shrink:0;letter-spacing:0.06em;padding-top:3px;}
+
+    .next-project{padding:80px 48px;border-top:1px solid var(--rule);display:flex;justify-content:space-between;align-items:center;}
+    .np-label{font-family:var(--mono);font-size:16px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+    .np-name{font-family:var(--serif);font-size:clamp(32px,4vw,52px);font-weight:300;}
+    .np-link{text-decoration:none;color:var(--ink);}
+    .np-link:hover .np-name{color:var(--accent);}
+    .np-arrow{font-size:48px;color:var(--rule);transition:color 0.2s ease,transform 0.2s ease;}
+    .np-link:hover .np-arrow{color:var(--accent);transform:translate(8px,-8px);}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+    .reveal{opacity:0;transform:translateY(20px);transition:opacity 0.7s ease,transform 0.7s ease;}
+    .reveal.visible{opacity:1;transform:translateY(0);}
+
+    @media(max-width:900px){.cs-hero{padding-left:40px;padding-right:40px;}.cs-body{padding-left:40px;padding-right:40px;}.panel{padding-left:40px;padding-right:40px;}.moment{padding-left:40px;padding-right:40px;}.next-project{padding-left:40px;padding-right:40px;}}@media(max-width:768px){
+      nav.top{padding:16px 24px;}
+      .cs-hero,.cs-body,.panel,.moment,.shortflow,.next-project{padding-left:24px;padding-right:24px;}
+      .cs-hero{padding-top:120px;}
+      .sh-map{grid-template-columns:1fr;}
+      .evidence-chain{grid-template-columns:1fr;}
+      .ev-arrow-animated{display:none;}
+      .next-project{flex-direction:column;align-items:flex-start;gap:24px;}.cs-meta-row{gap:24px;}.cs-meta-row .cs-meta-item{min-width:calc(50% - 12px);}
+    }
+  @media(max-width:480px){nav.top{padding:12px 20px;}.cs-hero,.cs-body,.panel,.moment,.next-project{padding-left:20px;padding-right:20px;}.cs-hero{padding-top:100px;}.cs-meta-row{flex-direction:column;gap:16px;}.before-after{grid-template-columns:1fr;}.ba-panel+.ba-panel{border-left:none;border-top:1px solid var(--rule);}}</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+<nav class="top">
+  <a href="anzenn.html" class="nav-back">← Previous</a>
+  <span class="nav-meta">Contractor Qualification Platform</span>
+  <a href="flowdesk.html" class="nav-next">Next →</a>
+</nav>
+
+<section class="cs-hero">
+  <div class="cs-hero-bg"></div>
+  <div class="cs-eyebrow">Contractor Qualification Platform</div>
+  <h1 class="cs-title">Prequaligy</h1>
+  <p class="cs-hook">"Three groups. One broken system. The issue wasn't missing functionality."</p>
+  <div class="cs-meta-row">
+    <div class="cs-meta-item"><span class="cs-meta-label">Role</span><span class="cs-meta-val">UI/UX Designer</span></div>
+    <div class="cs-meta-item"><span class="cs-meta-label">Product Type</span><span class="cs-meta-val">Contractor Qualification Platform</span></div>
+    <div class="cs-meta-item"><span class="cs-meta-label">Stakeholders</span><span class="cs-meta-val">3 distinct user groups</span></div>
+    <div class="cs-meta-item"><span class="cs-meta-label">Solution</span><span class="cs-meta-val">ShortFlow</span></div>
+  </div>
+</section>
+
+<div class="cs-body">
+  <div class="cs-section reveal">
+    <span class="section-label">The situation</span>
+    <h2 class="cs-h2">Three groups,<br>one system, all<br><em>struggling.</em></h2>
+    <p class="cs-p">Contractor prequalification sounds procedural. In practice, it's a coordination problem across three distinct groups, Requestors who initiate qualifications, Contractors who complete them, and Administrators who oversee and approve.</p>
+    <p class="cs-p">Each group had a different view of the same process. Each had a different set of blockers. And the platform that was supposed to connect them had become the source of their shared frustration.</p>
+    <p class="cs-p">The impulse was to add features, more status updates, better notifications, more fields. But the features were already there. The problem was structural.</p>
+  </div>
+</div>
+
+<!-- MOMENT IT CLICKED -->
+<div class="moment reveal">
+  <div class="moment-text">
+    The problem wasn't missing functionality.<br>
+    It was <em>exposed complexity.</em>
+  </div>
+</div>
+
+<!-- STAKEHOLDER PAIN POINTS, DARK + INTERACTIVE -->
+<section class="panel panel-dark">
+  <div class="panel-inner">
+    <span class="section-label" style="color:rgba(255,255,255,0.3);">Who was struggling, and how</span>
+    <h2 class="cs-h2" style="color:var(--paper);">Click each group<br>to hear their story.</h2>
+    <div class="sh-map" id="shMap">
+      <div class="sh-card" data-group="requestor">
+        <div class="sh-role">Stakeholder A</div>
+        <div class="sh-name">Requestor</div>
+        <div class="sh-teaser">Initiates the prequalification process.</div>
+        <ul class="sh-pain">
+          <li>No visibility into where a contractor's qualification stands without manually checking</li>
+          <li>Sending reminders manually, no automated nudge in the system</li>
+          <li>Can't prioritize which contractors need attention most</li>
+          <li>Too much information at once; hard to see what needs action</li>
+        </ul>
+      </div>
+      <div class="sh-card" data-group="contractor">
+        <div class="sh-role">Stakeholder B</div>
+        <div class="sh-name">Contractor</div>
+        <div class="sh-teaser">Responds to and completes qualifications.</div>
+        <ul class="sh-pain">
+          <li>Doesn't know what's expected before starting, requirements buried inside the form</li>
+          <li>No save-and-return, completing a qualification requires a single unbroken session</li>
+          <li>Error messages appear after submission, not during entry</li>
+          <li>Multiple active qualifications with no unified status view</li>
+        </ul>
+      </div>
+      <div class="sh-card" data-group="admin">
+        <div class="sh-role">Stakeholder C</div>
+        <div class="sh-name">Administrator</div>
+        <div class="sh-teaser">Oversees, audits, and approves qualifications.</div>
+        <ul class="sh-pain">
+          <li>Review queue has no prioritization, everything looks equally urgent</li>
+          <li>Can't identify bottlenecks without exporting data to a spreadsheet</li>
+          <li>Approval requires navigating through multiple screens per contractor</li>
+          <li>No audit trail visible in the primary interface</li>
+        </ul>
+      </div>
+    </div>
+
+   
+
+<!-- EVIDENCE BOARD -->
+<section class="panel panel-dark" style="padding-top:30px;">
+  <div class="panel-inner">
+    <div class="evidence-board" id="evidenceBoard">
+      <div class="evidence-board-label" style="color:rgba(255,255,255,0.3);">Evidence board, diagnosing the root cause</div>
+      <div class="evidence-chain">
+        <div class="evidence-node">
+          <div class="ev-tag">Observation</div>
+          <div class="ev-text">All three groups frustrated by same platform, but for entirely different reasons</div>
+        </div>
+        <div class="ev-arrow-animated">
+          <svg class="ev-arrow-svg" width="32" height="16" viewBox="0 0 32 16"><path class="ev-arrow-path" d="M0 8 L24 8 M18 2 L24 8 L18 14"/></svg>
+        </div>
+        <div class="evidence-node">
+          <div class="ev-tag">Evidence</div>
+          <div class="ev-text">Each group has most of the information they need, but must work to extract it from the interface</div>
+        </div>
+        <div class="ev-arrow-animated">
+          <svg class="ev-arrow-svg" width="32" height="16" viewBox="0 0 32 16"><path class="ev-arrow-path" d="M0 8 L24 8 M18 2 L24 8 L18 14"/></svg>
+        </div>
+        <div class="evidence-node">
+          <div class="ev-tag">Insight</div>
+          <div class="ev-text">The system is technically complete but cognitively expensive, the structure of the interface works against the structure of the work</div>
+        </div>
+        <div class="ev-arrow-animated">
+          <svg class="ev-arrow-svg" width="32" height="16" viewBox="0 0 32 16"><path class="ev-arrow-path" d="M0 8 L24 8 M18 2 L24 8 L18 14"/></svg>
+        </div>
+        <div class="evidence-node">
+          <div class="ev-tag">Decision</div>
+          <div class="ev-text">Redesign the information sequence per role, not the features themselves</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="cs-body">
+  <div class="cs-section reveal">
+    <span class="section-label">The diagnosis</span>
+    <h2 class="cs-h2">Not a features problem.<br>A <em>workflow</em> problem.</h2>
+    <p class="cs-p">After mapping each stakeholder's journey, a pattern emerged. Every group had most of the information they needed. But the information was presented in a way that required them to work to extract it.</p>
+    <p class="cs-p">Requestors had to dig for status. Contractors had to commit before understanding requirements. Administrators had to export data to prioritize their queue.</p>
+
+    <div class="pull">If the system already has the right information, the design problem is: in what order should each stakeholder see it, and in what form?</div>
+
+    <p class="cs-p">
+    To understand where friction appeared, I mapped the existing qualification journey across requestors, contractors, and administrators. The flow revealed repeated context switching, hidden requirements, and unnecessary decision points that slowed progress for every stakeholder.
+    </p>
+
+    <!-- Flow map placeholder -->
+    <h3 style="margin-bottom:16px;">Current Qualification Flow</h3>
+
+    <img src="./images/prequalflow(2).png" alt="Current Flow Map 1" class="flow-diagram-full">
+
+    <img src="./images/prequalflow3(1).png" alt="Current Flow Map 3" class="flow-diagram-full">
+    </div>
+  </div>
+</div>
+
+<!-- SHORTFLOW REVEAL -->
+<div class="shortflow">
+  <div class="sf-word">ShortFlow</div>
+  <div class="sf-sub">Progressive disclosure meets guided workflow</div>
+</div>
+
+<div class="cs-body">
+  <div class="cs-section reveal">
+    <span class="section-label">Design goals</span>
+    <h2 class="cs-h2">What ShortFlow<br>was built to do.</h2>
+    <div class="goals-list">
+      <div class="goal-item">
+        <span class="goal-n">01</span>
+        <div><div class="goal-text"><strong>Progressive disclosure by stakeholder role.</strong></div><div class="goal-sub">Each user sees only what's relevant at their stage. Requestors see action items first. Contractors see requirements before they start. Admins see prioritized queues.</div></div>
+      </div>
+      <div class="goal-item">
+        <span class="goal-n">02</span>
+        <div><div class="goal-text"><strong>Guided workflows that reduce cognitive load.</strong></div><div class="goal-sub">Replace open-ended forms with guided step sequences. Each step has exactly one decision. Progress is always visible.</div></div>
+      </div>
+      <div class="goal-item">
+        <span class="goal-n">03</span>
+        <div><div class="goal-text"><strong>Centralized status visibility across all roles.</strong></div><div class="goal-sub">Every stakeholder can see the current state of every relevant qualification, without hunting. Status surfaces to the top of every view.</div></div>
+      </div>
+      <div class="goal-item">
+        <span class="goal-n">04</span>
+        <div><div class="goal-text"><strong>Action-oriented dashboards that remove interpretation.</strong></div><div class="goal-sub">Instead of showing data, show what needs to happen. Make that action one click away.</div></div>
+      </div>
+      <div class="goal-item">
+        <span class="goal-n">05</span>
+        <div><div class="goal-text"><strong>AI-powered prioritization for administrators.</strong></div><div class="goal-sub">Surface contractors who most need attention based on deadline, completeness, and risk signals, so admins direct effort where it matters.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Placeholders -->
+    <div class="cs-section reveal">
+      <span class="section-label">Design explorations</span>
+      <h2 class="cs-h2">Designing a guided qualification experience.</h2>
+      <p class="cs-p">
+      ShortFlow restructures qualification into a guided workflow. Instead of exposing every field and requirement upfront, information is progressively revealed based on role, task, and completion status.
+      </p>
+      <div class="cs-section reveal">
+  <span class="section-label">Solution concept</span>
+
+  <h2 class="cs-h2">
+    From open-ended forms to a
+    <em>guided workflow.</em>
+  </h2>
+
+  <p class="cs-p">
+    ShortFlow restructures qualification into a guided workflow. Instead of exposing every field and requirement upfront, information is progressively revealed based on role, task, and completion status.
+  </p>
+
+  <img src="./images/prequal4(1).png" alt="ShortFlow Guided Workflow" class="shortflow-image-full">
+</div>
+
+<div class="cs-section reveal">
+  <span class="section-label">Final experience</span>
+
+  <h2 class="cs-h2">
+    A single place to manage
+    <em>qualification progress.</em>
+  </h2>
+
+  <p class="cs-p">
+    The final experience gives stakeholders visibility into qualification status, pending actions, and progress without requiring them to dig through multiple screens.
+  </p>
+
+  <img src="./images/prequal5(1).png" alt="Qualification Dashboard" class="shortflow-image-full">
+</div>
+  
+
+  <div class="cs-section reveal">
+    <span class="section-label">Reflections</span>
+    <h2 class="cs-h2">Designing for multiple mental models.</h2>
+    <ul class="takeaway-list">
+      <li><span class="t-num">01</span><span>Multi-stakeholder systems need multiple entry points. One interface trying to serve three different mental models will serve none of them well.</span></li>
+      <li><span class="t-num">02</span><span>Progressive disclosure is not about hiding information, it's about sequencing it. The right information at the right moment reduces cognitive load more than any visual simplification.</span></li>
+      <li><span class="t-num">03</span><span>"The features are all there" is not a sign that the design is done. A technically complete system can still be functionally unusable if the structure works against the user's workflow.</span></li>
+      <li><span class="t-num">04</span><span>Action-orientation changes a dashboard entirely. Users don't need to see data, they need to know what to do with it.</span></li>
+    </ul>
+  </div>
+</div>
+
+<div class="next-project">
+  <div>
+    <div class="np-label">Next investigation</div>
+    <a href="flowdesk.html" class="np-link"><div class="np-name">FlowDesk →</div></a>
+  </div>
+  <a href="flowdesk.html" class="np-link"><div class="np-arrow">↗</div></a>
+</div>
+
+<script>
+  window.addEventListener('scroll',()=>{ document.getElementById('progress').style.width=(window.scrollY/(document.body.scrollHeight-window.innerHeight)*100)+'%'; });
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});
+  },{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
+  document.querySelectorAll('.reveal,.goal-item').forEach(el=>obs.observe(el));
+  document.querySelectorAll('.sh-card').forEach(card=>{
+    card.addEventListener('click',()=>{
+      const wasActive=card.classList.contains('active');
+      document.querySelectorAll('.sh-card').forEach(c=>c.classList.remove('active'));
+      if(!wasActive) card.classList.add('active');
+    });
+  });
+  const ebObs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.querySelectorAll('.ev-arrow-path').forEach((path,i)=>{
+          setTimeout(()=>{ path.style.transition=`stroke-dashoffset 0.5s ease`; path.style.strokeDashoffset='0'; },i*200+200);
+        });
+        ebObs.unobserve(e.target);
+      }
+    });
+  },{threshold:0.3});
+  document.querySelectorAll('.evidence-board').forEach(el=>ebObs.observe(el));
+</script>
+</body>
+</html>
